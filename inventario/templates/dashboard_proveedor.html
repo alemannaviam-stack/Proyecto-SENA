@@ -1,43 +1,69 @@
-<div style="max-width: 1000px; margin: 40px auto; font-family: sans-serif; padding: 20px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Inventario - Nebula</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+
+<div class="contenedor-dashboard">
+    <div class="header-flex">
         <h2>📦 Mi Inventario de Productos</h2>
-        <a href="{% url 'agregar_producto' %}" style="padding: 10px 20px; background-color: #2b2b2b; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">+ Añadir Producto</a>
+        <a href="{% url 'agregar_producto' %}" class="btn-oscuro">+ Añadir Producto</a>
     </div>
 
     {% if messages %}
         {% for message in messages %}
-            <div style="padding: 10px; background-color: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 20px;">{{ message }}</div>
+            <div class="alerta-exito">{{ message }}</div>
         {% endfor %}
     {% endif %}
 
-    <table style="width: 100%; border-collapse: collapse; text-align: left; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    <table class="tabla-inventario">
         <thead>
-            <tr style="background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
-                <th style="padding: 12px;">Producto</th>
-                <th style="padding: 12px;">Categoría</th>
-                <th style="padding: 12px;">Precio</th>
-                <th style="padding: 12px;">Stock Disponible</th>
-                <th style="padding: 12px;">Estado</th>
+            <tr>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock Disponible</th>
+                <th>Estado</th>
             </tr>
         </thead>
         <tbody>
             {% for item in inventario %}
-            <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 12px; font-weight: bold;">{{ item.nombre }} <br><span style="font-size: 12px; color:#888;">{{ item.marca }}</span></td>
-                <td style="padding: 12px;">{{ item.categoria.nombre }}</td>
-                <td style="padding: 12px;">${{ item.precio }} COP</td>
-                <td style="padding: 12px; font-weight: bold; color: {% if item.cantidad_disponible < 5 %}red{% else %}green{% endif %};">
+            <tr>
+                <td>
+                    <span class="nombre-producto">{{ item.nombre }}</span>
+                    <span class="marca-producto">{{ item.marca }}</span>
+                </td>
+                <td>{{ item.categoria.nombre }}</td>
+                <td>${{ item.precio }} COP</td>
+                
+                <!-- ➔ CORREGIDO: Clases dinámicas en lugar de estilos inline en conflicto -->
+                <td class="{% if item.cantidad_disponible < 5 %}stock-bajo{% else %}stock-normal{% endif %}">
                     {{ item.cantidad_disponible }} uds
                 </td>
-                <td style="padding: 12px;">
-                    {% if item.esta_activo %}<span style="background: #e6f4ea; color: #137333; padding: 3px 8px; border-radius: 10px; font-size: 12px;">Activo</span>{% else %}Pausado{% endif %}
+                
+                <td>
+                    {% if item.esta_activo %}
+                        <span class="badge badge-activo">Activo</span>
+                    {% else %}
+                        <span class="badge badge-pausado">Pausado</span>
+                    {% endif %}
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" style="padding: 20px; text-align: center; color: #666;">No has registrado productos todavía.</td>
+                <td colspan="5" style="padding: 30px; text-align: center; color: var(--purple-400);">
+                    No has registrado productos todavía.
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
+</body>
+</html>

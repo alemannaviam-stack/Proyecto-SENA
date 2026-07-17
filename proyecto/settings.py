@@ -25,8 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'usuarios',
     'inventario',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -106,7 +106,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'inventario' / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
@@ -118,3 +121,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Al loguearse con éxito, Django los envía a la vista que decide su destino
 LOGIN_REDIRECT_URL = 'redireccionar_por_rol'
 LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'

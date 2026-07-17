@@ -1,25 +1,37 @@
-{% load static %} 
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Producto - Nebula</title>
+    <!-- Enlace directo a su propio archivo CSS de formulario -->
+    <link rel="stylesheet" href="{% static 'formulario.css' %}">
+</head>
+<body>
 
-<link rel="stylesheet" href="{% static 'estilo.css' %}"> 
-
-<div style="max-width: 600px; margin: 40px auto; font-family: sans-serif; padding: 25px; border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+<div class="contenedor-formulario">
     <h2>➕ Registrar Nuevo Producto</h2>
-    <p style="color: #666; font-size: 14px;">Completa los detalles técnicos del producto que vas a ofrecer al inventario.</p>
-    <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+    <p class="subtitulo">Completa los detalles técnicos del producto que vas a ofrecer al inventario.</p>
+    <hr class="separador">
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <div style="margin-bottom: 15px;">
+        
+        <div class="campos-formulario">
             {{ form.as_p }}
         </div>
         
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button type="submit" style="flex: 1; padding: 12px; background-color: #d15b8f; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold;">
+        <div class="grupo-botones">
+            <button type="submit" class="btn-primario">
                 Guardar en Inventario
             </button>
-            <a href="{% url 'dashboard_proveedor' %}" style="padding: 12px; background-color: #f5f5f5; color: #333; text-decoration: none; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; text-align: center;">
+            <a href="{% url 'dashboard_proveedor' %}" class="btn-cancelar">
                 Cancelar
             </a>
         </div>
     </form>
 </div>
+
+</body>
+</html>
