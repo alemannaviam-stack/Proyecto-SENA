@@ -1,21 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-# Extensión del usuario para Clientes o Proveedores
 class Perfil(models.Model):
-    ROLES = (
-        ('cliente', 'Cliente'),
-        ('proveedor', 'Proveedor'),
-        ('administrador', 'Administrador'),
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
-    rol = models.CharField(max_length=20, choices=ROLES, default='cliente')
-    telefono = models.CharField(max_length=15, blank=True, null=True)
-    
-    # Solo aplica si es proveedor
-    calificacion_positiva = models.IntegerField(default=0)
-    calificacion_negativa = models.IntegerField(default=0)
-    activo = models.BooleanField(default=True)  # Para que el admin pueda "despedirlo" o desactivarlo
+    ROLES = [
+        ('ADMIN', 'Administrador de la Plataforma'),
+        ('PROVEEDOR', 'Proveedor de Herramientas'),
+        ('CLIENTE', 'Cliente Final'),
+    ]
+
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
+    rol = models.CharField(max_length=15, choices=ROLES, default='CLIENTE')
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+    direccion = models.CharField(max_length=255, blank=True, null=True)
+    ciudad = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.rol}"
+        return f"{self.usuario.username} - {self.get_rol_display()}"
+
+# Signals para automatizar la creación del perfil
+@receiver(post_save, sender=User)
+def crear_perfil_usuario(sender, instance, created, **kwargs):
+    if created:
+        Perfil.objects.create(usuario=instance)
+
+@receiver(post_save, sender=User)
+def guardar_perfil_usuario(sender, instance, **kwargs):
+    instance.perfil.save()

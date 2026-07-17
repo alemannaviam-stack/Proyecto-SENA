@@ -1,13 +1,23 @@
 from django.db import models
+<<<<<<< HEAD
 from django.contrib.auth.models import User
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField(blank=True, null=True)
+=======
+
+class Producto(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
+>>>>>>> 0217c3cc69aa399165e2058f6b2025b03c9d4c91
 
     def __str__(self):
         return self.nombre
 
+<<<<<<< HEAD
 
 class Producto(models.Model):
     """
@@ -27,5 +37,11 @@ class Producto(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     ultima_actualizacion = models.DateTimeField(auto_now=True)
 
+=======
+class Stock(models.Model):
+    producto = models.OneToOneField(Producto, on_delete=models.CASCADE, related_name='stock')
+    cantidad = models.PositiveIntegerField(default=0)
+    proveedor = models.ForeignKey('usuarios.Perfil', on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'rol': 'proveedor'})
+>>>>>>> 0217c3cc69aa399165e2058f6b2025b03c9d4c91
     def __str__(self):
         return f"{self.nombre} ({self.marca}) - Prov: {self.proveedor.username}"
