@@ -3,16 +3,25 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Producto
 from .forms import ProductoForm
+from rastreo.models import Envio
+
 
 @login_required
 def dashboard_proveedor(request):
     if request.user.perfil.rol != 'PROVEEDOR':
         return redirect('login')
-        
+
     # Filtra los productos de este proveedor
     mis_productos = Producto.objects.filter(proveedor=request.user)
+
+    # Filtra los envíos de los productos de este proveedor
+    mis_envios = Envio.objects.filter(producto__proveedor=request.user).order_by('-fecha_creacion')
+
     # Renderiza directo al HTML global sin subcarpetas
-    return render(request, 'dashboard_proveedor.html', {'inventario': mis_productos})
+    return render(request, 'dashboard_proveedor.html', {
+        'inventario': mis_productos,
+        'envios': mis_envios,
+    })
 
 
 @login_required
@@ -30,5 +39,5 @@ def agregar_producto(request):
             return redirect('dashboard_proveedor')
     else:
         form = ProductoForm()
-        
+
     return render(request, 'agregar_producto.html', {'form': form})

@@ -40,12 +40,11 @@
                 </td>
                 <td>{{ item.categoria.nombre }}</td>
                 <td>${{ item.precio }} COP</td>
-                
-                <!-- ➔ CORREGIDO: Clases dinámicas en lugar de estilos inline en conflicto -->
+
                 <td class="{% if item.cantidad_disponible < 5 %}stock-bajo{% else %}stock-normal{% endif %}">
                     {{ item.cantidad_disponible }} uds
                 </td>
-                
+
                 <td>
                     {% if item.esta_activo %}
                         <span class="badge badge-activo">Activo</span>
@@ -58,6 +57,39 @@
             <tr>
                 <td colspan="5" style="padding: 30px; text-align: center; color: var(--purple-400);">
                     No has registrado productos todavía.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="header-flex" style="margin-top: 40px;">
+        <h2>🚚 Envíos por gestionar</h2>
+    </div>
+
+    <table class="tabla-inventario">
+        <thead>
+            <tr>
+                <th>Guía</th>
+                <th>Producto</th>
+                <th>Cliente</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for envio in envios %}
+            <tr>
+                <td>{{ envio.numero_guia }}</td>
+                <td>{{ envio.producto.nombre }}</td>
+                <td>{{ envio.cliente }}</td>
+                <td>{{ envio.get_estado_actual_display }}</td>
+                <td><a href="{% url 'rastreo:actualizar' envio_id=envio.id %}">Actualizar estado</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="padding: 20px; text-align: center; color: var(--purple-400);">
+                    No hay envíos registrados todavía.
                 </td>
             </tr>
             {% endfor %}
