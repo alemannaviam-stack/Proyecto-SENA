@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from inventario.models import Producto
 
-
-# En usuarios/views.py
 
 def tienda_home(request):
-    return render(request, 'tienda_home.html') # Nombre directo
+    productos = Producto.objects.filter(esta_activo=True)
+    return render(request, 'tienda_home.html', {'productos': productos})
+
 
 def registro(request):
-    # Aquí irá la lógica de tu formulario (arreglando el ImportError del formulario)
-    return render(request, 'registro.html') # Nombre directo
+    return render(request, 'registro.html')
