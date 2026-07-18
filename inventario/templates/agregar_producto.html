@@ -17,16 +17,16 @@
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        
+
         <div class="campos-formulario">
             {{ form.as_p }}
         </div>
-        
+
         <div class="grupo-botones">
             <button type="submit" class="btn-primario">
                 Guardar en Inventario
             </button>
-            <a href="{% url 'dashboard_proveedor' %}" class="btn-cancelar">
+            <a href="{% url 'dashboard' %}" class="btn-cancelar">
                 Cancelar
             </a>
         </div>

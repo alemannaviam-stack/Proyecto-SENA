@@ -36,7 +36,7 @@ def agregar_producto(request):
             producto.proveedor = request.user
             producto.save()
             messages.success(request, '¡Producto añadido con éxito al inventario!')
-            return redirect('dashboard_proveedor')
+            return redirect('dashboard')
     else:
         form = ProductoForm()
 
