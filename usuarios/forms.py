@@ -5,9 +5,8 @@ def registro(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save() # Aquí se guarda el nuevo usuario
+            form.save() 
             
-            # ¡AQUÍ ESTÁ LA MAGIA!: Redirige automáticamente al home usando su 'name'
             return redirect('tienda_home') 
     else:
         form = UserCreationForm()

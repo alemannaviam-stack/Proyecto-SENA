@@ -11,9 +11,6 @@ class Categoria(models.Model):
 
 
 class Producto(models.Model):
-    """
-    Representa cada artículo físico en el inventario.
-    """
     proveedor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='productos')
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, related_name='articulos')
 
