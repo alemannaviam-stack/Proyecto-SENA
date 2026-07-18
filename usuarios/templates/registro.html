@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio y Registro</title>
+      <link rel="stylesheet" href="{% static 'inicio.css' %}">
+</head>
+<body>
+    
+<div class="container">
+    <div class="left-side">
+        <div class="tabs">
+            <span id="logintap" class="active">Login</span>
+            <span id="signuptap">Sign Up</span>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <form id="loginForm" class="active">
+            <div class="profile-icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <h2>LOGIN</h2>
+
+            <div class="input-box">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" placeholder="Email" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn-login">LOGIN</button>
+        </form>
+ 
+        <form id="signupForm">
+            <div class="profile-icon">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h2>Sign Up</h2>
+
+            <div class="input-box">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" placeholder="Full Name" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" placeholder="Email" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn-login">SIGN UP</button>
+        </form>  
+    </div>
+</div>
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>
