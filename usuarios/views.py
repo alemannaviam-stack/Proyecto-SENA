@@ -20,22 +20,27 @@ def login_view(request):
             auth_login(request, user)
             return redirect('home')
         messages.error(request, 'Correo o contraseña incorrectos.')
-        return redirect('login')
-    return render(request, 'login.html')
+        return redirect('registro')
+    return render(request, 'registro.html')
 
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 
 def registro(request):
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-
-        if User.objects.filter(username=email).exists():
-            messages.error(request, 'Ese correo ya está registrado.')
-            return redirect('registro')
-
-        user = User.objects.create_user(username=email, email=email, password=password, first_name=nombre)
-        auth_login(request, user)
-        return redirect('home')
-
-    return render(request, 'login.html')
+        usuario = request.POST.get('username')
+        correo = request.POST.get('email')
+        clave = request.POST.get('password')
+        
+        # Creamos el usuario en la base de datos de manera segura
+        nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
+        
+        # Iniciamos su sesión automáticamente
+        login(request, nuevo_usuario)
+        
+        # Lo redirigimos a la tienda
+        return redirect('tienda_home')
+        
+    return render(request, 'registro.html')
