@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{% static 'usuarios/style.css' %}">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
@@ -62,9 +62,11 @@
             <svg width="21" height="21"><use href="#i-cart"/></svg>
             <span class="icon-count" id="cartCount" hidden>0</span>
           </button>
-          <a href="#" class="icon-btn" aria-label="Mi cuenta">
+
+          <a href="{% url 'registro' %}" class="icon-btn" aria-label="Mi cuenta">
             <svg width="21" height="21"><use href="#i-user"/></svg>
           </a>
+
           <button class="icon-btn mobile-toggle" id="mobileToggle" aria-label="Abrir menú" aria-expanded="false">
             <svg width="22" height="22"><use href="#i-menu"/></svg>
           </button>
@@ -160,10 +162,10 @@
 
     <!-- ========== PRODUCTO 2 ========== -->
     <article class="product-card" data-category="capilar" data-new="true" data-store="true"
-      data-title="Kit Accesorios Pelo Lotso" data-ref="DYT2513" data-price="15000"
-      data-desc="Set de accesorios para el cabello con ganchos, moños y bandas a juego.">
+      data-title="Shampoo Reparador" data-ref="DYT2513" data-price="15000"
+      data-desc="Shampoo reparador con aroma a vainilla y extracto de miel, ideal para cabello seco y dañado.">
       <div class="product-media">
-        <img src="https://via.placeholder.com/300x300/8E44AD/FFFFFF?text=Lotso+Pelo" alt="Kit Accesorios Pelo Lotso" loading="lazy">
+        <img src="{% static 'img/shampooreparador.jpeg' %}" alt="Shampoo Reparador" loading="lazy">
         <span class="badge-new">Nuevo</span>
         <div class="card-actions">
           <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
@@ -172,7 +174,7 @@
       </div>
       <div class="product-info">
         <span class="product-category">Capilar</span>
-        <h2 class="product-title">Kit Accesorios Pelo Lotso</h2>
+        <h2 class="product-title">Shampoo Reparador</h2>
         <span class="product-ref">Ref DYT2513</span>
         <div class="product-footer">
           <span class="product-price">$ 15.000</span>
@@ -786,6 +788,6 @@
   <!-- ==================== TOAST ==================== -->
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-  <script src="{% static 'usuarios/script.js' %}"></script>
+  <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
