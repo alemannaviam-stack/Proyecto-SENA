@@ -255,7 +255,7 @@
     </style>
 </head>
 <body>
-    <div class="header-carrito">
+<div class="header-carrito">
         <h2>
             🛒 Mi Carrito
             {% if carrito.items.all %}
@@ -266,7 +266,6 @@
     </div>
 
     <div class="contenedor-carrito">
-        <!-- BOX DE DEBUG -->
         <div class="debug-box">
             <strong>🔍 DEBUG - Información del carrito:</strong><br>
             Usuario: {{ request.user.username }}<br>
@@ -289,7 +288,6 @@
             {% endfor %}
         {% endif %}
 
-        <!-- MOSTRAR ITEMS -->
         {% if carrito.items.all %}
             {% for item in carrito.items.all %}
                 <div class="tarjeta-item">
@@ -312,18 +310,12 @@
                 <a href="{% url 'confirmar_pago' %}" class="btn-pagar">💳 Pagar ahora</a>
             </div>
         {% else %}
-<<<<<<< HEAD
-            <a href="{% url 'home' %}">Volver a la tienda</a>
-=======
-            <div class="vacio">
-                <span class="vacio-icono">🛒</span>
-                <h3>Tu carrito está vacío</h3>
-                <p>Parece que aún no has agregado productos.</p>
+            <div style="text-align: center; margin: 20px 0;">
+                <p>Tu carrito está vacío.</p>
             </div>
->>>>>>> 9861d71a677f9bbea4304aa46987c042354dcfdb
         {% endif %}
 
-        <a href="{% url 'usuarios:home' %}" class="volver">← Seguir comprando</a>
+        <a href="{% url 'usuarios:tienda_home' %}" class="volver">← Seguir comprando</a>
     </div>
 </body>
 </html>
