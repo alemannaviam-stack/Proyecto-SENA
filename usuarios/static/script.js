@@ -333,14 +333,14 @@
           if (!card) return;
           const data = getProductData(card);
           const imgSrc = card.querySelector('.product-media img')?.src || '';
+          const marca = card.querySelector('.product-ref')?.textContent || '';
           // Llenar modal
           modalMedia.innerHTML = `<img src="${imgSrc}" alt="${data.title}" loading="lazy">`;
           modalCategory.textContent = data.category.charAt(0).toUpperCase() + data.category.slice(1);
           modalTitle.textContent = data.title;
-          modalRef.textContent = 'Ref ' + data.ref;
+          modalRef.textContent = marca;
           modalDesc.textContent = data.desc || 'Sin descripción';
           modalPrice.textContent = formatPrice(data.price);
-          // Guardar referencia para el botón "Agregar" del modal
           modalAdd.dataset.ref = data.ref;
           modalAdd.dataset.title = data.title;
           modalAdd.dataset.price = data.price;

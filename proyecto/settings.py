@@ -121,9 +121,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ➔ REDIRECCIONAMIENTO DE USUARIOS POR ROL
 # Al loguearse con éxito, Django los envía a la vista que decide su destino
-LOGIN_REDIRECT_URL = 'redireccionar_por_rol'
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'usuarios:redireccionar_por_rol'
+LOGOUT_REDIRECT_URL = 'usuarios:login'
+LOGIN_URL = 'usuarios:login'
 
 # Asegúrate de tener esto para los mensajes
 from django.contrib.messages import constants as messages
@@ -135,3 +135,6 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'error',
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
