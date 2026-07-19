@@ -34,7 +34,7 @@ def redirect_por_rol(user):
     rol = user.perfil.rol
 
     if rol == 'PROVEEDOR':
-        return redirect('usuarios:dashboard')
+        return redirect('usuarios:dashboard_proveedor')
     elif rol == 'ADMIN':
         return redirect('usuarios:dashboard_admin')
     else:  # CLIENTE
@@ -52,7 +52,8 @@ def registro(request):
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
         
         auth_login(request, nuevo_usuario)
-        return redirect('tienda_home')
+        # 🌟 Único cambio: Añadido 'usuarios:' antes de 'tienda_home'
+        return redirect('usuarios:tienda_home')
         
     return render(request, 'registro.html')
 
@@ -64,4 +65,5 @@ def perfil(request):
 def dashboard(request):
     if request.user.perfil.rol != 'PROVEEDOR':
         return redirect('usuarios:tienda_home')
-    return render(request, 'dashboard_proveedor.html') 
+        
+    return render(request, 'dashboard_proveedor.html')
