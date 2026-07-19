@@ -48,4 +48,7 @@ def registro(request):
 
 @login_required(login_url='login') # <-- Si no hay sesión, Django te mandará automáticamente a la ruta 'login'
 def perfil(request):
+    # Dejamos la vista apuntando a tu template real. 
+    # Si aún no diseñas 'perfil.html' y te da error, puedes cambiar temporalmente 
+    # la línea de abajo por: return redirect('tienda_home')
     return render(request, 'perfil.html')

@@ -197,7 +197,7 @@
                 <a href="{% url 'confirmar_pago' %}" class="btn-pagar">Pagar ahora</a>
             </div>
         {% else %}
-            <div class="vacio">Tu carrito está vacío.</div>
+            <a href="{% url 'home' %}">Volver a la tienda</a>
         {% endif %}
 
         <a href="{% url 'usuarios:home' %}" class="volver">← Seguir comprando</a>
