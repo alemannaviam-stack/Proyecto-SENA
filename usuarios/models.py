@@ -19,7 +19,7 @@ class Perfil(models.Model):
     def __str__(self):
         return f"{self.usuario.username} - {self.get_rol_display()}"
 
-# Signals para automatizar la creación del perfil
+
 @receiver(post_save, sender=User)
 def crear_perfil_usuario(sender, instance, created, **kwargs):
     if created:

@@ -21,7 +21,7 @@ def login_view(request):
         if usuario_encontrado is not None:
             user = authenticate(request, username=usuario_encontrado.username, password=clave_ingresada)
             if user is not None:
-                auth_login(request, user) # 🚀 Aquí guarda la sesión de verdad
+                auth_login(request, user)
                 return redirect('tienda_home')
             else:
                 return render(request, 'registro.html', {'error': 'Contraseña incorrecta.'})
@@ -41,14 +41,11 @@ def registro(request):
             
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
         
-        auth_login(request, nuevo_usuario) # 🚀 Aquí guarda la sesión tras registrarse
+        auth_login(request, nuevo_usuario)
         return redirect('tienda_home')
         
     return render(request, 'registro.html')
 
-@login_required(login_url='login') # <-- Si no hay sesión, Django te mandará automáticamente a la ruta 'login'
+@login_required(login_url='login')
 def perfil(request):
-    # Dejamos la vista apuntando a tu template real. 
-    # Si aún no diseñas 'perfil.html' y te da error, puedes cambiar temporalmente 
-    # la línea de abajo por: return redirect('tienda_home')
     return render(request, 'perfil.html')

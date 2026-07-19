@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nebula · Belleza con licencia para las más pequeñas</title>
 
-  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -14,7 +13,6 @@
 </head>
 
 <body>
-  <!-- Sprite de iconos (se mantiene igual) -->
   <svg class="icon-sprite" aria-hidden="true">
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.2" y2="16.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-10-9.3C.5 8 1.7 4.7 4.9 3.8c2.1-.6 4.2.3 5.4 2 .5.7 1.1 1.7 1.7 1.7s1.2-1 1.7-1.7c1.2-1.7 3.3-2.6 5.4-2 3.2.9 4.4 4.2 2.9 7.4C19.5 15.9 12 20.5 12 20.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
@@ -59,11 +57,14 @@
             <span class="icon-count" id="favCount" hidden>0</span>
           </button>
 
-          <a href="{% url 'ver_carrito' %}" class="icon-btn" id="cartBtn" aria-label="Ver carrito">
+          <a href="/carrito/" class="icon-btn" id="cartBtn" aria-label="Ver carrito">
             <svg width="21" height="21"><use href="#i-cart"/></svg>
             <span class="icon-count" id="cartCount" hidden>0</span>
           </a>
 
+          <a href="/registro/" class="icon-btn" aria-label="Mi cuenta">
+            <svg width="21" height="21"><use href="#i-user"/></svg>
+          </a>
           <div class="user-navigation">
                 {% if request.user.is_authenticated %}
               <a href="{% url 'perfil' %}" class="icon-btn" aria-label="Ver mi perfil">
@@ -102,13 +103,12 @@
           <li><a href="#grid" data-nav="capilar">Capilar</a></li>
           <li><a href="#grid" data-nav="tiendas">Tiendas</a></li>
           <li><a href="#grid" data-nav="nueva">Nueva Colección</a></li>
-          <li><a href="{% url 'rastreo:mis_envios' %}">Mis pedidos</a></li>
+          <li><a href="/rastreo/mis-envios/">Mis pedidos</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- ==================== HERO ==================== -->
   <section id="inicio" class="hero" aria-roledescription="carrusel" aria-label="Destacados">
     <button class="hero-arrow hero-arrow-left" id="heroPrev" aria-label="Diapositiva anterior">
       <svg width="20" height="20"><use href="#i-chev-l"/></svg>
@@ -139,7 +139,7 @@
     <div class="hero-dots" id="heroDots" role="tablist" aria-label="Seleccionar diapositiva"></div>
   </section>
 
-  <!-- ==================== TOOLBAR ==================== -->
+
   <section class="toolbar" aria-label="Filtros activos">
     <p class="toolbar-count"><strong id="resultCount">{{ productos|length|add:24 }}</strong> productos</p>
     <div class="active-pills" id="activePills"></div>
@@ -147,43 +147,43 @@
 
 <section class="product-grid" id="grid">
 
-    {% for producto in productos %}
-    <article class="product-card"
-      data-category="{% if producto.categoria %}{{ producto.categoria.nombre|lower }}{% else %}otros{% endif %}"
-      data-new="true" data-store="true"
-      data-title="{{ producto.nombre }}" data-ref="{{ producto.id }}" data-price="{{ producto.precio }}"
-      data-desc="{{ producto.descripcion }}">
-      
-      <div class="product-media">
-        {% if producto.imagen %}
-          <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" loading="lazy">
-        {% else %}
-          <img src="https://via.placeholder.com/300x300/7B2D8E/FFFFFF?text={{ producto.nombre|urlencode }}" alt="{{ producto.nombre }}" loading="lazy">
-        {% endif %}
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
+  {% for producto in productos %}
+  <article class="product-card"
+    data-category="{% if producto.categoria %}{{ producto.categoria.nombre|lower }}{% else %}otros{% endif %}"
+    data-new="true" data-store="true"
+    data-title="{{ producto.nombre }}" data-ref="{{ producto.id }}" data-price="{{ producto.precio }}"
+    data-desc="{{ producto.descripcion }}">
+    
+    <div class="product-media">
+      {% if producto.imagen %}
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" loading="lazy">
+      {% else %}
+        <img src="https://via.placeholder.com/300x300/7B2D8E/FFFFFF?text={{ producto.nombre|urlencode }}" alt="{{ producto.nombre }}" loading="lazy">
+      {% endif %}
+      <span class="badge-new">Nuevo</span>
+      <div class="card-actions">
+        <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
+        <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
       </div>
-      
-      <div class="product-info">
-        <span class="product-category">{% if producto.categoria %}{{ producto.categoria.nombre }}{% else %}Sin categoría{% endif %}</span>
-        <h2 class="product-title">{{ producto.nombre }}</h2>
-        <span class="product-ref">{{ producto.marca|default:"" }}</span>
-        <div class="product-footer">
-          <span class="product-price">$ {{ producto.precio }} COP</span>
-          <a href="{% url 'agregar_al_carrito' producto_id=producto.id %}" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
+    </div>
+    
+    <div class="product-info">
+      <span class="product-category">{% if producto.categoria %}{{ producto.categoria.nombre }}{% else %}Sin categoría{% endif %}</span>
+      <h2 class="product-title">{{ producto.nombre }}</h2>
+      <span class="product-ref">{{ producto.marca|default:"" }}</span>
+      <div class="product-footer">
+        <span class="product-price">$ {{ producto.precio }} COP</span>
+        <a href="{% url 'agregar_al_carrito' producto_id=producto.id %}" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
       </div>
-    </article>
-    {% endfor %}
+    </div>
+  </article>
+  {% endfor %}
 
-  </section>
+</section>
 
-  <p class="empty-state" id="emptyState" hidden>No encontramos productos con esos filtros. Prueba quitando alguno.</p>
+<p class="empty-state" id="emptyState" hidden>No encontramos productos con esos filtros. Prueba quitando alguno.</p>
+  
 
-  <!-- ==================== FOOTER ==================== -->
   <footer class="site-footer" id="footer">
     <div class="footer-inner">
       <div class="payment-methods">
@@ -264,7 +264,6 @@
     </div>
   </footer>
 
-  <!-- ==================== MODAL ==================== -->
   <div class="modal-overlay" id="modalOverlay" hidden>
     <div class="quickview-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <button class="modal-close" id="modalClose" aria-label="Cerrar">
@@ -284,7 +283,6 @@
     </div>
   </div>
 
-  <!-- ==================== TOAST ==================== -->
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <script src="{% static 'script.js' %}"></script>
