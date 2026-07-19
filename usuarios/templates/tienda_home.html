@@ -62,16 +62,11 @@
             <svg width="21" height="21"><use href="#i-cart"/></svg>
             <span class="icon-count" id="cartCount" hidden>0</span>
           </a>
-
-          <a href="/usuarios/registro/" class="icon-btn" aria-label="Mi cuenta">
-            <svg width="21" height="21"><use href="#i-user"/></svg>
-          </a>
           
           <div class="user-navigation">
             {% if request.user.is_authenticated %}
-              <a href="{% url 'usuarios:perfil' %}" class="icon-btn" aria-label="Ver mi perfil">
-                <svg width="21" height="21" style="color: #b38cd9;"><use href="#i-user"/></svg>
-                <span style="font-size: 0.9rem; margin-left: 0.3rem;">Hola, {{ request.user.username }}</span>
+              <a href="{% url 'usuarios:perfil' %}" class="icon-btn" aria-label="Ver mi perfil" style="text-decoration: none;">
+                <span style="font-size: 0.9rem; color: #b38cd9; font-weight: 500;">Hola, {{ request.user.username }}</span>
               </a>
             {% else %}
               <a href="{% url 'usuarios:registro' %}" class="icon-btn" aria-label="Iniciar sesión o Registrarse">

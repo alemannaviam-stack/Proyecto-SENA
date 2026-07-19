@@ -18,7 +18,7 @@
     </div>
 
     <div class="right-side">
-        <form id="loginForm" method="POST" action="{% url 'login' %}" class="active">
+        <form id="loginForm" method="POST" action="{% url 'usuarios:login' %}" class="active">
             {% csrf_token %} 
             <div class="profile-icon">
                 <i class="fa-solid fa-user"></i>
@@ -38,7 +38,7 @@
             <button type="submit" class="btn-login">LOGIN</button>
         </form>
  
-        <form id="signupForm" method="POST" action="{% url 'registro' %}">
+        <form id="signupForm" method="POST" action="{% url 'usuarios:registro' %}">
             {% csrf_token %} 
             <div class="profile-icon">
                 <i class="fa-solid fa-user-plus"></i>
