@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.apps import apps
 
 def tienda_home(request):
-    Producto = apps.get_model('inventario', 'Producto')
-
+    Producto = apps.get_model('inventario', 'Producto') 
+    
     productos = Producto.objects.filter(esta_activo=True)
     return render(request, 'tienda_home.html', {'productos': productos})
 
@@ -22,7 +22,7 @@ def login_view(request):
             user = authenticate(request, username=usuario_encontrado.username, password=clave_ingresada)
             if user is not None:
                 auth_login(request, user)
-                return redirect('usuarios:tienda_home')
+                return redirect_por_rol(user)
             else:
                 return render(request, 'registro.html', {'error': 'Contraseña incorrecta.'})
         else:
@@ -30,22 +30,32 @@ def login_view(request):
 
     return render(request, 'registro.html')
 
+def redirect_por_rol(user):
+    rol = user.perfil.rol
+
+    if rol == 'PROVEEDOR':
+        return redirect('usuarios:dashboard_proveedor')
+    elif rol == 'ADMIN':
+        return redirect('usuarios:dashboard_admin')
+    else:  # CLIENTE
+        return redirect('usuarios:tienda_home')
+    
 def registro(request):
     if request.method == 'POST':
         usuario = request.POST.get('username')
         correo = request.POST.get('email')
         clave = request.POST.get('password')
-
+        
         if User.objects.filter(username=usuario).exists() or User.objects.filter(email=correo).exists():
             return render(request, 'registro.html', {'error': 'El usuario o correo ya existen.'})
-
+            
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
-
+        
         auth_login(request, nuevo_usuario)
-        return redirect('usuarios:tienda_home')
-
+        return redirect('tienda_home')
+        
     return render(request, 'registro.html')
 
-@login_required(login_url='usuarios:login')
+@login_required(login_url='login')
 def perfil(request):
     return render(request, 'perfil.html')
