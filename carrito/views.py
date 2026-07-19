@@ -27,14 +27,14 @@ def agregar_al_carrito(request, producto_id):
         item.save()
 
     messages.success(request, f'{producto.nombre} añadido al carrito.')
-    return redirect('ver_carrito')
+    return redirect('carrito:ver_carrito')
 
 
 @login_required
 def quitar_item(request, item_id):
     item = get_object_or_404(ItemCarrito, id=item_id, carrito__cliente=request.user)
     item.delete()
-    return redirect('ver_carrito')
+    return redirect('carrito:ver_carrito')
 
 
 @login_required
@@ -44,7 +44,7 @@ def confirmar_pago(request):
 
     if not items:
         messages.warning(request, 'Tu carrito está vacío.')
-        return redirect('ver_carrito')
+        return redirect('carrito:ver_carrito')
 
     # 🚀 Traemos los modelos de rastreo dinámicamente de la app 'rastreo'
     Envio = apps.get_model('rastreo', 'Envio')
