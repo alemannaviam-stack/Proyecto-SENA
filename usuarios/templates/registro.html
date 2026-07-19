@@ -25,6 +25,10 @@
             </div>
             <h2>LOGIN</h2>
 
+            {% if error %}
+                <p style="color: rgba(255, 0, 0, 0.788);">{{ error }}</p>
+            {% endif %}
+
             <div class="input-box">
                 <i class="fa-solid fa-envelope"></i>
                 <input type="email" name="username" placeholder="Email" required>
@@ -44,6 +48,10 @@
                 <i class="fa-solid fa-user-plus"></i>
             </div>
             <h2>Sign Up</h2>
+
+            {% if error %}
+                <p style="color: rgba(255, 0, 0, 0.788);">{{ error }}</p>
+            {% endif %}
 
             <div class="input-box">
                 <i class="fa-solid fa-user"></i>
