@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio y Registro</title>
-      <link rel="stylesheet" href="{% static 'inicio.css' %}">
+    <link rel="stylesheet" href="{% static 'inicio.css' %}">
 </head>
 <body>
     
@@ -18,7 +18,8 @@
     </div>
 
     <div class="right-side">
-        <form id="loginForm" class="active">
+        <form id="loginForm" method="POST" action="{% url 'login' %}" class="active">
+            {% csrf_token %} 
             <div class="profile-icon">
                 <i class="fa-solid fa-user"></i>
             </div>
@@ -26,18 +27,19 @@
 
             <div class="input-box">
                 <i class="fa-solid fa-envelope"></i>
-                <input type="email" placeholder="Email" required>
+                <input type="email" name="username" placeholder="Email" required>
             </div>
 
             <div class="input-box">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Password" required>
             </div>
 
             <button type="submit" class="btn-login">LOGIN</button>
         </form>
  
-        <form id="signupForm">
+        <form id="signupForm" method="POST" action="{% url 'registro' %}">
+            {% csrf_token %} 
             <div class="profile-icon">
                 <i class="fa-solid fa-user-plus"></i>
             </div>
@@ -45,17 +47,17 @@
 
             <div class="input-box">
                 <i class="fa-solid fa-user"></i>
-                <input type="text" placeholder="Full Name" required>
+                <input type="text" name="username" placeholder="Full Name" required>
             </div>
 
             <div class="input-box">
                 <i class="fa-solid fa-envelope"></i>
-                <input type="email" placeholder="Email" required>
+                <input type="email" name="email" placeholder="Email" required>
             </div>
 
             <div class="input-box">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Password" required>
             </div>
 
             <button type="submit" class="btn-login">SIGN UP</button>
@@ -63,6 +65,6 @@
     </div>
 </div>
 
-<script src="{% static 'script.js' %}"></script>
+<script src="{% static 'inicio.js' %}"></script>
 </body>
 </html>
