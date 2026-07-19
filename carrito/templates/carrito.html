@@ -297,7 +297,7 @@
                     </div>
                     <div class="acciones-item">
                         <span class="subtotal">${{ item.subtotal }} COP</span>
-                        <a href="{% url 'quitar_item' item_id=item.id %}" class="btn-quitar">✕ Quitar</a>
+                        <a href="{% url 'carrito:quitar_item' item_id=item.id %}" class="btn-quitar">✕ Quitar</a>
                     </div>
                 </div>
             {% endfor %}
@@ -307,7 +307,7 @@
                     <span>Total</span>
                     <span>${{ carrito.total }} COP</span>
                 </div>
-                <a href="{% url 'confirmar_pago' %}" class="btn-pagar">💳 Pagar ahora</a>
+                <a href="{% url 'carrito:confirmar_pago' %}" class="btn-pagar">💳 Pagar ahora</a>
             </div>
         {% else %}
             <div style="text-align: center; margin: 20px 0;">
