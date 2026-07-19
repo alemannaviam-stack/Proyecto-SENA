@@ -64,9 +64,18 @@
             <span class="icon-count" id="cartCount" hidden>0</span>
           </a>
 
-          <a href="{% url 'registro' %}" class="icon-btn" aria-label="Mi cuenta">
-            <svg width="21" height="21"><use href="#i-user"/></svg>
-          </a>
+          <div class="user-navigation">
+                {% if request.user.is_authenticated %}
+              <a href="{% url 'perfil' %}" class="icon-btn" aria-label="Ver mi perfil">
+                <svg width="21" height="21" style="color: #b38cd9;"><use href="#i-user"/></svg>
+                <span style="font-size: 0.9rem; margin-left: 0.3rem;">Hola, {{ request.user.username }}</span>
+              </a>
+                {% else %}
+              <a href="{% url 'registro' %}" class="icon-btn" aria-label="Iniciar sesión o Registrarse">
+                <svg width="21" height="21"><use href="#i-user"/></svg>
+              </a>
+              {% endif %}
+          </div>
 
           <button class="icon-btn mobile-toggle" id="mobileToggle" aria-label="Abrir menú" aria-expanded="false">
             <svg width="22" height="22"><use href="#i-menu"/></svg>
@@ -746,7 +755,6 @@
             <li><a href="#">Trabaja con nosotros</a></li>
             <li><a href="#">Preguntas frecuentes</a></li>
             <li><a href="#">Contáctanos</a></li>
-            <li><a href="#">Ejecutivas comerciales</a></li>
           </ul>
         </div>
 
@@ -761,11 +769,11 @@
           <p class="nit">NIT. 901.374.981-3</p>
           <p class="write-us">
             <strong>Escríbenos</strong><br />
-            <a href="mailto:servicioalcliente@trendyshop.com.co" class="email-link">servicioalcliente@trendyshop.com.co</a>
+            <a href="mailto:servicioalcliente@nebulashop.com.co" class="email-link">servicioalcliente@nebulashop.com.co</a>
           </p>
           <p class="whatsapp">
             Línea WhatsApp<br />
-            <strong>+57 316 3440010</strong>
+            <strong>+57 301 2345678</strong>
           </p>
         </div>
       </div>
