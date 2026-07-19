@@ -33,9 +33,10 @@
     <symbol id="i-pinterest" viewBox="0 0 24 24"><path d="M12 3.5c-4.7 0-8 3.2-8 7.2 0 2.6 1.4 4.4 3 5-.1-.5-.3-1.4 0-2 .2-.6 1.4-6 1.4-6s-.4-.7-.4-1.8c0-1.7 1-2.9 2.2-2.9 1 0 1.6.8 1.6 1.7 0 1-.7 2.6-1 4-.3 1.2.6 2.2 1.8 2.2 2.1 0 3.7-2.3 3.7-5.5 0-2.9-2-4.9-5-4.9-3.4 0-5.4 2.6-5.4 5.2 0 1 .4 2.1 .9 2.7.1.1.1.2.1.3l-.3 1.4c0 .2-.1.2-.3.1-1.2-.6-2-2.4-2-3.9 0-3.2 2.3-6.1 6.6-6.1 3.5 0 6.2 2.5 6.2 5.8 0 3.5-2.2 6.3-5.2 6.3-1 0-2-.5-2.3-1.1l-.6 2.4c-.2.9-.8 2-1.3 2.7.9.3 1.9.4 3 .4 4.7 0 8.4-3.8 8.4-8.6S16.7 3.5 12 3.5z" fill="currentColor"/></symbol>
     <symbol id="i-yt" viewBox="0 0 24 24"><rect x="3" y="6.5" width="18" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10.5 9.5l5 2.5-5 2.5z" fill="currentColor"/></symbol>
   </svg>
+  
 
   <!-- ==================== HEADER ==================== -->
-  <header class="site-header" id="siteHeader">
+<header class="site-header" id="siteHeader">
     <div class="header-inner">
       <div class="top-header">
         <a href="#inicio" class="logo" aria-label="Nebula — ir al inicio">
@@ -62,20 +63,21 @@
             <span class="icon-count" id="cartCount" hidden>0</span>
           </a>
 
-          <a href="/registro/" class="icon-btn" aria-label="Mi cuenta">
+          <a href="/usuarios/registro/" class="icon-btn" aria-label="Mi cuenta">
             <svg width="21" height="21"><use href="#i-user"/></svg>
           </a>
+          
           <div class="user-navigation">
-                {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated %}
               <a href="{% url 'usuarios:perfil' %}" class="icon-btn" aria-label="Ver mi perfil">
                 <svg width="21" height="21" style="color: #b38cd9;"><use href="#i-user"/></svg>
                 <span style="font-size: 0.9rem; margin-left: 0.3rem;">Hola, {{ request.user.username }}</span>
               </a>
-                {% else %}
+            {% else %}
               <a href="{% url 'usuarios:registro' %}" class="icon-btn" aria-label="Iniciar sesión o Registrarse">
                 <svg width="21" height="21"><use href="#i-user"/></svg>
               </a>
-              {% endif %}
+            {% endif %}
           </div>
 
           <button class="icon-btn mobile-toggle" id="mobileToggle" aria-label="Abrir menú" aria-expanded="false">
@@ -109,565 +111,46 @@
     </div>
   </header>
 
-  <section id="inicio" class="hero" aria-roledescription="carrusel" aria-label="Destacados">
-    <button class="hero-arrow hero-arrow-left" id="heroPrev" aria-label="Diapositiva anterior">
-      <svg width="20" height="20"><use href="#i-chev-l"/></svg>
-    </button>
-    <div class="hero-track" id="heroTrack">
-      <article class="hero-slide" style="--slide-a:#6C3B8C; --slide-b:#2D1B4E;">
-        <p class="hero-eyebrow">Colección con licencia</p>
-        <h1>El clóset de belleza que sí quieren tener</h1>
-        <p class="hero-copy">Cosmetiqueras, accesorios y maquillaje de tus personajes favoritos, pensados para manos pequeñas.</p>
-        <a href="#grid" class="hero-cta">Ver catálogo</a>
-      </article>
-      <article class="hero-slide" style="--slide-a:#8E44AD; --slide-b:#4A1F6A;">
-        <p class="hero-eyebrow">Ofertas de temporada</p>
-        <h1>Hasta 20% menos en set seleccionados</h1>
-        <p class="hero-copy">Aprovecha antes de que se agoten las referencias más buscadas del mes.</p>
-        <a href="#grid" class="hero-cta">Ver ofertas</a>
-      </article>
-      <article class="hero-slide" style="--slide-a:#9B59B6; --slide-b:#2D1B4E;">
-        <p class="hero-eyebrow">Recién llegado</p>
-        <h1>Nueva colección Toy Story ya está aquí</h1>
-        <p class="hero-copy">Sombras, brillos y accesorios de cabello para armar looks llenos de imaginación.</p>
-        <a href="#grid" class="hero-cta">Descubrir</a>
-      </article>
-    </div>
-    <button class="hero-arrow hero-arrow-right" id="heroNext" aria-label="Siguiente diapositiva">
-      <svg width="20" height="20"><use href="#i-chev-r"/></svg>
-    </button>
-    <div class="hero-dots" id="heroDots" role="tablist" aria-label="Seleccionar diapositiva"></div>
-  </section>
+  <!-- ===== CARRUSEL (HERO) ===== -->
+<section class="hero" aria-roledescription="carrusel" aria-label="Destacados">
+  <button class="hero-arrow hero-arrow-left" id="heroPrev" aria-label="Diapositiva anterior">
+    <svg width="20" height="20"><use href="#i-chev-l"/></svg>
+  </button>
 
-
-  <section class="toolbar" aria-label="Filtros activos">
-    <p class="toolbar-count"><strong id="resultCount">{{ productos|length|add:24 }}</strong> productos</p>
-    <div class="active-pills" id="activePills"></div>
-  </section>
-
-  <section class="product-grid" id="grid">
-
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true"
-      data-title="Cosmetiquera Barbie Dreams" data-ref="MTT2480" data-price="25000"
-      data-desc="Cosmetiquera compacta con cierre resistente, ideal para guardar los accesorios de maquillaje favoritos.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7B2D8E/FFFFFF?text=Barbie+Dreams" alt="Cosmetiquera Barbie Dreams" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Cosmetiquera Barbie Dreams</h2>
-        <span class="product-ref">Ref MTT2480</span>
-        <div class="product-footer">
-          <span class="product-price">$ 25.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
+  <div class="hero-track" id="heroTrack">
+    <!-- Slide 1 -->
+    <article class="hero-slide" style="--slide-a:#6C3B8C; --slide-b:#2D1B4E;">
+      <p class="hero-eyebrow">Colección con licencia</p>
+      <h1>El clóset de belleza que sí quieren tener</h1>
+      <p class="hero-copy">Cosmetiqueras, accesorios y maquillaje de tus personajes favoritos, pensados para manos pequeñas.</p>
+      <a href="#grid" class="hero-cta">Ver catálogo</a>
     </article>
 
-    <article class="product-card" data-category="capilar" data-new="true" data-store="true"
-      data-title="Shampoo Reparador" data-ref="DYT2513" data-price="15000"
-      data-desc="Shampoo reparador con aroma a vainilla y extracto de miel, ideal para cabello seco y dañado.">
-      <div class="product-media">
-        <img src="{% static 'img/shampooreparador.jpeg' %}" alt="Shampoo Reparador" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Shampoo Reparador</h2>
-        <span class="product-ref">Ref DYT2513</span>
-        <div class="product-footer">
-          <span class="product-price">$ 15.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
+    <!-- Slide 2 -->
+    <article class="hero-slide" style="--slide-a:#8E44AD; --slide-b:#4A1F6A;">
+      <p class="hero-eyebrow">Ofertas de temporada</p>
+      <h1>Hasta 20% menos en set seleccionados</h1>
+      <p class="hero-copy">Aprovecha antes de que se agoten las referencias más buscadas del mes.</p>
+      <a href="#grid" class="hero-cta">Ver ofertas</a>
     </article>
 
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true"
-      data-title="Paleta Sombra Toy Story" data-ref="DYT2528" data-price="40000"
-      data-desc="Paleta de sombras con tonos pigmentados para crear looks divertidos.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/9B59B6/FFFFFF?text=Toy+Story+Sombra" alt="Paleta Sombra Toy Story" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Paleta Sombra Toy Story</h2>
-        <span class="product-ref">Ref DYT2528</span>
-        <div class="product-footer">
-          <span class="product-price">$ 40.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
+    <!-- Slide 3 -->
+    <article class="hero-slide" style="--slide-a:#9B59B6; --slide-b:#2D1B4E;">
+      <p class="hero-eyebrow">Recién llegado</p>
+      <h1>Nueva colección Toy Story ya está aquí</h1>
+      <p class="hero-copy">Sombras, brillos y accesorios de cabello para armar looks llenos de imaginación.</p>
+      <a href="#grid" class="hero-cta">Descubrir</a>
     </article>
+  </div>
 
-    <article class="product-card" data-category="facial" data-new="true" data-store="true"
-      data-title="Malteada Bronceadora Body Shine" data-ref="DYT2675" data-price="15000"
-      data-desc="Loción corporal con brillo suave y aroma dulce, presentación tipo malteada. Tono 01.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Body+Shine" alt="Malteada Bronceadora" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Malteada Bronceadora Body Shine</h2>
-        <span class="product-ref">Ref DYT2675</span>
-        <span class="product-detail">Tono 01</span>
-        <div class="product-footer">
-          <span class="product-price">$ 15.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
+  <button class="hero-arrow hero-arrow-right" id="heroNext" aria-label="Siguiente diapositiva">
+    <svg width="20" height="20"><use href="#i-chev-r"/></svg>
+  </button>
 
-    <article class="product-card" data-category="capilar" data-new="false" data-store="true"
-      data-title="Set Moños y Ligas Frozen" data-ref="CAP101" data-price="12000"
-      data-desc="Set de 12 ligas y 6 moños con motivos de Frozen.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Frozen+Moños" alt="Set Moños Frozen" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Set Moños y Ligas Frozen</h2>
-        <span class="product-ref">Ref CAP101</span>
-        <div class="product-footer">
-          <span class="product-price">$ 12.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
+  <div class="hero-dots" id="heroDots" role="tablist" aria-label="Seleccionar diapositiva"></div>
+</section>
 
-    <article class="product-card" data-category="maquillaje" data-new="false" data-store="false"
-      data-title="Labial Brillante Minnie" data-ref="MAQ204" data-price="18000"
-      data-desc="Labial con brillo y sabor a fresa, empaque de Minnie.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/6C3483/FFFFFF?text=Minnie+Labial" alt="Labial Minnie" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Labial Brillante Minnie</h2>
-        <span class="product-ref">Ref MAQ204</span>
-        <div class="product-footer">
-          <span class="product-price">$ 18.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="false" data-store="false"
-      data-title="Gel de Aloe Vera con Unicornio" data-ref="FAC312" data-price="22000"
-      data-desc="Gel refrescante de aloe vera con aroma a unicornio.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/8E44AD/FFFFFF?text=Aloe+Unicornio" alt="Gel Aloe Unicornio" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Gel de Aloe Vera con Unicornio</h2>
-        <span class="product-ref">Ref FAC312</span>
-        <div class="product-footer">
-          <span class="product-price">$ 22.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="true" data-store="false"
-      data-title="Peine Mágico con Purpurina" data-ref="CAP205" data-price="9000"
-      data-desc="Peine con purpurina y brillos, ideal para desenredar.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Peine+Purpurina" alt="Peine Mágico" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Peine Mágico con Purpurina</h2>
-        <span class="product-ref">Ref CAP205</span>
-        <div class="product-footer">
-          <span class="product-price">$ 9.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="false"
-      data-title="Set de Sombras Dinosaurio" data-ref="MAQ309" data-price="35000"
-      data-desc="Set de 6 sombras con tonos tierra y verde, empaque de dinosaurio.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Dino+Sombra" alt="Set Dinosaurio" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Set de Sombras Dinosaurio</h2>
-        <span class="product-ref">Ref MAQ309</span>
-        <div class="product-footer">
-          <span class="product-price">$ 35.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="true" data-store="false"
-      data-title="Crema Hidratante Sirena" data-ref="FAC401" data-price="28000"
-      data-desc="Crema hidratante con perlas de colores y aroma a caramelo.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/8E44AD/FFFFFF?text=Sirena+Crema" alt="Crema Sirena" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Crema Hidratante Sirena</h2>
-        <span class="product-ref">Ref FAC401</span>
-        <div class="product-footer">
-          <span class="product-price">$ 28.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="false"
-      data-title="Gorro de Baño con Orejas" data-ref="CAP115" data-price="14000"
-      data-desc="Gorro de baño con orejas de conejo, ajustable.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/6C3483/FFFFFF?text=Gorro+Orejas" alt="Gorro Orejas" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Gorro de Baño con Orejas</h2>
-        <span class="product-ref">Ref CAP115</span>
-        <div class="product-footer">
-          <span class="product-price">$ 14.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="false"
-      data-title="Pintura Facial Arcoíris" data-ref="MAQ521" data-price="21000"
-      data-desc="Set de 8 colores para pintura facial, lavable y seguro.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/9B59B6/FFFFFF?text=Pintura+Arcoíris" alt="Pintura Arcoíris" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Pintura Facial Arcoíris</h2>
-        <span class="product-ref">Ref MAQ521</span>
-        <div class="product-footer">
-          <span class="product-price">$ 21.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="false" data-store="false"
-      data-title="Exfoliante de Azúcar con Oso" data-ref="FAC228" data-price="19000"
-      data-desc="Exfoliante suave con aroma a miel y ositos de goma.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Exfoliante+Oso" alt="Exfoliante Oso" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Exfoliante de Azúcar con Oso</h2>
-        <span class="product-ref">Ref FAC228</span>
-        <div class="product-footer">
-          <span class="product-price">$ 19.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="false"
-      data-title="Cepillo Desenredante Princesa" data-ref="CAP302" data-price="16000"
-      data-desc="Cepillo con cerdas suaves y diseño de princesa.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Cepillo+Princesa" alt="Cepillo Princesa" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Cepillo Desenredante Princesa</h2>
-        <span class="product-ref">Ref CAP302</span>
-        <div class="product-footer">
-          <span class="product-price">$ 16.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true"
-      data-title="Set de Uñas con Purpurina" data-ref="MAQ410" data-price="27000"
-      data-desc="Set de 10 uñas postizas con purpurina y pegamento.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/8E44AD/FFFFFF?text=Uñas+Purpurina" alt="Set Uñas" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Set de Uñas con Purpurina</h2>
-        <span class="product-ref">Ref MAQ410</span>
-        <div class="product-footer">
-          <span class="product-price">$ 27.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="true" data-store="true"
-      data-title="Mascarilla de Frutas Divertida" data-ref="FAC503" data-price="13000"
-      data-desc="Mascarilla facial con aroma a frutas, presentación divertida.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/6C3483/FFFFFF?text=Mascarilla+Frutas" alt="Mascarilla Frutas" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Mascarilla de Frutas Divertida</h2>
-        <span class="product-ref">Ref FAC503</span>
-        <div class="product-footer">
-          <span class="product-price">$ 13.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="false"
-      data-title="Diadema con Lazo Gigante" data-ref="CAP119" data-price="8000"
-      data-desc="Diadema acolchada con lazo grande de tela.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Diadema+Lazo" alt="Diadema Lazo" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Diadema con Lazo Gigante</h2>
-        <span class="product-ref">Ref CAP119</span>
-        <div class="product-footer">
-          <span class="product-price">$ 8.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="false" data-store="false"
-      data-title="Gloss de Labios con Sabor" data-ref="MAQ618" data-price="14000"
-      data-desc="Gloss brillante con sabor a fresa y empaque de corazón.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/9B59B6/FFFFFF?text=Gloss+Labios" alt="Gloss Labios" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Gloss de Labios con Sabor</h2>
-        <span class="product-ref">Ref MAQ618</span>
-        <div class="product-footer">
-          <span class="product-price">$ 14.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="false" data-store="false"
-      data-title="Toallitas Húmedas con Olor a Algodón" data-ref="FAC701" data-price="11000"
-      data-desc="Toallitas húmedas suaves para el rostro, con aroma a algodón.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Toallitas+Algodón" alt="Toallitas" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Toallitas Húmedas con Olor a Algodón</h2>
-        <span class="product-ref">Ref FAC701</span>
-        <div class="product-footer">
-          <span class="product-price">$ 11.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="true" data-store="false"
-      data-title="Trenza Postiza con Brillo" data-ref="CAP222" data-price="32000"
-      data-desc="Trenza postiza con hilos brillantes, fácil de colocar.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/6C3483/FFFFFF?text=Trenza+Brillo" alt="Trenza Postiza" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Trenza Postiza con Brillo</h2>
-        <span class="product-ref">Ref CAP222</span>
-        <div class="product-footer">
-          <span class="product-price">$ 32.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="false" data-store="false"
-      data-title="Pestañas Postizas con Purpurina" data-ref="MAQ733" data-price="19000"
-      data-desc="Pestañas postizas con purpurina, incluye pegamento.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/8E44AD/FFFFFF?text=Pestañas+Purpurina" alt="Pestañas" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Pestañas Postizas con Purpurina</h2>
-        <span class="product-ref">Ref MAQ733</span>
-        <div class="product-footer">
-          <span class="product-price">$ 19.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="true" data-store="false"
-      data-title="Bálsamo Labial con Sabor a Sandía" data-ref="FAC812" data-price="9000"
-      data-desc="Bálsamo labial hidratante con sabor a sandía, empaque divertido.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Bálsamo+Sandía" alt="Bálsamo Sandía" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Bálsamo Labial con Sabor a Sandía</h2>
-        <span class="product-ref">Ref FAC812</span>
-        <div class="product-footer">
-          <span class="product-price">$ 9.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="false"
-      data-title="Pack de Ligas con Pompones" data-ref="CAP901" data-price="7000"
-      data-desc="Pack de 20 ligas con pompones de colores.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/9B59B6/FFFFFF?text=Ligas+Pompones" alt="Ligas Pompones" loading="lazy">
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Pack de Ligas con Pompones</h2>
-        <span class="product-ref">Ref CAP901</span>
-        <div class="product-footer">
-          <span class="product-price">$ 7.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true"
-      data-title="Set de Brochas con Estuche" data-ref="MAQ555" data-price="45000"
-      data-desc="Set de 5 brochas profesionales con estuche de unicornio.">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Brochas+Unicornio" alt="Set Brochas" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-        <div class="card-actions">
-          <button class="pill-btn btn-view" aria-label="Ver detalles"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
-          <button class="pill-btn btn-fav" aria-label="Añadir a favoritos" aria-pressed="false"><svg width="17" height="17"><use href="#i-heart"/></svg></button>
-        </div>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Set de Brochas con Estuche</h2>
-        <span class="product-ref">Ref MAQ555</span>
-        <div class="product-footer">
-          <span class="product-price">$ 45.000</span>
-          <button class="btn-add">Agregar</button>
-        </div>
-      </div>
-    </article>
-
-
-<section class="product-grid" id="grid">
+  <section class="product-grid" id="grid" style="margin-top: 40px;">
 
     {% for producto in productos %}
     <article class="product-card"
@@ -680,7 +163,7 @@
         {% if producto.imagen %}
           <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" loading="lazy">
         {% else %}
-          <img src="https://placehold.co/300x300/7B2D8E/FFFFFF?text={{ producto.nombre|urlencode }}" alt="{{ producto.nombre }}" loading="lazy">
+          <img src="https://via.placeholder.com/300x300/7B2D8E/FFFFFF?text={{ producto.nombre|urlencode }}" alt="{{ producto.nombre }}" loading="lazy">
         {% endif %}
         <span class="badge-new">Nuevo</span>
         <div class="card-actions">
@@ -695,339 +178,11 @@
         <span class="product-ref">{{ producto.marca|default:"" }}</span>
         <div class="product-footer">
           <span class="product-price">$ {{ producto.precio }} COP</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
+          <a href="{% url 'carrito:agregar_al_carrito' producto_id=producto.id %}" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
         </div>
       </div>
     </article>
     {% endfor %}
-
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7B2D8E/FFFFFF?text=Barbie+Dreams" alt="Cosmetiquera Barbie Dreams" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Cosmetiquera Barbie Dreams</h2>
-        <span class="product-ref">Ref MTT2480</span>
-        <div class="product-footer">
-          <span class="product-price">$ 25.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="true" data-store="true">
-      <div class="product-media">
-        <img src="{% static 'img/shampooreparador.jpeg' %}" alt="Shampoo Reparador" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Shampoo Reparador</h2>
-        <span class="product-ref">Ref DYT2513</span>
-        <div class="product-footer">
-          <span class="product-price">$ 15.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/9B59B6/FFFFFF?text=Toy+Story+Sombra" alt="Paleta Sombra Toy Story" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Paleta Sombra Toy Story</h2>
-        <span class="product-ref">Ref DYT2528</span>
-        <div class="product-footer">
-          <span class="product-price">$ 40.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="true" data-store="true">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Body+Shine" alt="Malteada Bronceadora" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Malteada Bronceadora Body Shine</h2>
-        <span class="product-ref">Ref DYT2675</span>
-        <div class="product-footer">
-          <span class="product-price">$ 15.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="true">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Frozen+Moños" alt="Set Moños Frozen" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Set Moños y Ligas Frozen</h2>
-        <span class="product-ref">Ref CAP101</span>
-        <div class="product-footer">
-          <span class="product-price">$ 12.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/6C3483/FFFFFF?text=Minnie+Labial" alt="Labial Minnie" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Labial Brillante Minnie</h2>
-        <span class="product-ref">Ref MAQ204</span>
-        <div class="product-footer">
-          <span class="product-price">$ 18.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/8E44AD/FFFFFF?text=Aloe+Unicornio" alt="Gel Aloe Unicornio" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Gel de Aloe Vera con Unicornio</h2>
-        <span class="product-ref">Ref FAC312</span>
-        <div class="product-footer">
-          <span class="product-price">$ 22.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="true" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Peine+Purpurina" alt="Peine Mágico" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Peine Mágico con Purpurina</h2>
-        <span class="product-ref">Ref CAP205</span>
-        <div class="product-footer">
-          <span class="product-price">$ 9.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Dino+Sombra" alt="Set Dinosaurio" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Set de Sombras Dinosaurio</h2>
-        <span class="product-ref">Ref MAQ309</span>
-        <div class="product-footer">
-          <span class="product-price">$ 35.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Exfoliante+Oso" alt="Exfoliante Oso" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Exfoliante de Azúcar con Oso</h2>
-        <span class="product-ref">Ref FAC228</span>
-        <div class="product-footer">
-          <span class="product-price">$ 19.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Cepillo+Princesa" alt="Cepillo Princesa" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Cepillo Desenredante Princesa</h2>
-        <span class="product-ref">Ref CAP302</span>
-        <div class="product-footer">
-          <span class="product-price">$ 16.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/8E44AD/FFFFFF?text=Uñas+Purpurina" alt="Set Uñas" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Set de Uñas con Purpurina</h2>
-        <span class="product-ref">Ref MAQ410</span>
-        <div class="product-footer">
-          <span class="product-price">$ 27.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="true" data-store="true">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/6C3483/FFFFFF?text=Mascarilla+Frutas" alt="Mascarilla Frutas" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Mascarilla de Frutas Divertida</h2>
-        <span class="product-ref">Ref FAC503</span>
-        <div class="product-footer">
-          <span class="product-price">$ 13.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Diadema+Lazo" alt="Diadema Lazo" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Diadema con Lazo Gigante</h2>
-        <span class="product-ref">Ref CAP119</span>
-        <div class="product-footer">
-          <span class="product-price">$ 8.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/9B59B6/FFFFFF?text=Gloss+Labios" alt="Gloss Labios" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Gloss de Labios con Sabor</h2>
-        <span class="product-ref">Ref MAQ618</span>
-        <div class="product-footer">
-          <span class="product-price">$ 14.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Toallitas+Algodón" alt="Toallitas" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Toallitas Húmedas con Olor a Algodón</h2>
-        <span class="product-ref">Ref FAC701</span>
-        <div class="product-footer">
-          <span class="product-price">$ 11.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="true" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/6C3483/FFFFFF?text=Trenza+Brillo" alt="Trenza Postiza" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Trenza Postiza con Brillo</h2>
-        <span class="product-ref">Ref CAP222</span>
-        <div class="product-footer">
-          <span class="product-price">$ 32.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/8E44AD/FFFFFF?text=Pestañas+Purpurina" alt="Pestañas" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Pestañas Postizas con Purpurina</h2>
-        <span class="product-ref">Ref MAQ733</span>
-        <div class="product-footer">
-          <span class="product-price">$ 19.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="facial" data-new="true" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/7D3C98/FFFFFF?text=Bálsamo+Sandía" alt="Bálsamo Sandía" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-      </div>
-      <div class="product-info">
-        <span class="product-category">Facial</span>
-        <h2 class="product-title">Bálsamo Labial con Sabor a Sandía</h2>
-        <span class="product-ref">Ref FAC812</span>
-        <div class="product-footer">
-          <span class="product-price">$ 9.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="capilar" data-new="false" data-store="false">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/9B59B6/FFFFFF?text=Ligas+Pompones" alt="Ligas Pompones" loading="lazy">
-      </div>
-      <div class="product-info">
-        <span class="product-category">Capilar</span>
-        <h2 class="product-title">Pack de Ligas con Pompones</h2>
-        <span class="product-ref">Ref CAP901</span>
-        <div class="product-footer">
-          <span class="product-price">$ 7.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card" data-category="maquillaje" data-new="true" data-store="true">
-      <div class="product-media">
-        <img src="https://placehold.co/300x300/A569BD/FFFFFF?text=Brochas+Unicornio" alt="Set Brochas" loading="lazy">
-        <span class="badge-new">Nuevo</span>
-
-      </div>
-      <div class="product-info">
-        <span class="product-category">Maquillaje</span>
-        <h2 class="product-title">Set de Brochas con Estuche</h2>
-        <span class="product-ref">Ref MAQ555</span>
-        <div class="product-footer">
-          <span class="product-price">$ 45.000</span>
-          <a href="#" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
-        </div>
-      </div>
-    </article>
 
   </section>
 
