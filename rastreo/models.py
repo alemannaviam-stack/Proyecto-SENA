@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from inventario.models import Producto  # ajusta el nombre real de tu modelo
 
+
 class Envio(models.Model):
     ESTADOS = [
         ('preparando', 'Preparando pedido'),
@@ -18,7 +19,7 @@ class Envio(models.Model):
     numero_guia = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
-        return f"Envío #{self.codigo_seguimiento} - {self.cliente}"
+        return f"Envío #{self.numero_guia} - {self.cliente}"
 
 
 class HistorialEstado(models.Model):

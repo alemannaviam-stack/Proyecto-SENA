@@ -6,28 +6,28 @@ from django.contrib.auth.decorators import login_required
 from django.apps import apps
 
 def tienda_home(request):
-    Producto = apps.get_model('inventario', 'Producto') 
-    
+    Producto = apps.get_model('inventario', 'Producto')
+
     productos = Producto.objects.filter(esta_activo=True)
     return render(request, 'tienda_home.html', {'productos': productos})
 
 def login_view(request):
     if request.method == 'POST':
-        correo_ingresado = request.POST.get('username') 
+        correo_ingresado = request.POST.get('username')
         clave_ingresada = request.POST.get('password')
-        
+
         usuario_encontrado = User.objects.filter(email=correo_ingresado).first()
-        
+
         if usuario_encontrado is not None:
             user = authenticate(request, username=usuario_encontrado.username, password=clave_ingresada)
             if user is not None:
                 auth_login(request, user)
-                return redirect('tienda_home')
+                return redirect('usuarios:tienda_home')
             else:
                 return render(request, 'registro.html', {'error': 'Contraseña incorrecta.'})
         else:
             return render(request, 'registro.html', {'error': 'No existe la cuenta.'})
-            
+
     return render(request, 'registro.html')
 
 def registro(request):
@@ -35,17 +35,17 @@ def registro(request):
         usuario = request.POST.get('username')
         correo = request.POST.get('email')
         clave = request.POST.get('password')
-        
+
         if User.objects.filter(username=usuario).exists() or User.objects.filter(email=correo).exists():
             return render(request, 'registro.html', {'error': 'El usuario o correo ya existen.'})
-            
+
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
-        
+
         auth_login(request, nuevo_usuario)
-        return redirect('tienda_home')
-        
+        return redirect('usuarios:tienda_home')
+
     return render(request, 'registro.html')
 
-@login_required(login_url='login')
+@login_required(login_url='usuarios:login')
 def perfil(request):
     return render(request, 'perfil.html')

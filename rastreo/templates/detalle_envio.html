@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Seguimiento #{{ envio.codigo_seguimiento }}</title>
+    <title>Seguimiento #{{ envio.numero_guia }}</title>
     <style>
         :root {
             --purple-900: #2d1b4e;
@@ -122,7 +122,7 @@
 
     <div class="contenedor-rastreo">
         <div class="tarjeta-info">
-            <p><strong>Código:</strong> #{{ <envio class="numero_guia"></envio> }}</p>
+            <p><strong>Código:</strong> #{{ envio.numero_guia }}</p>
             <p><strong>Producto:</strong> {{ envio.producto }}</p>
             <p><strong>Fecha del pedido:</strong> {{ envio.fecha_creacion|date:"d/m/Y H:i" }}</p>
             <span class="estado-actual">{{ envio.get_estado_actual_display }}</span>

@@ -106,8 +106,8 @@
             <ul class="lista-envios">
                 {% for envio in envios %}
                     <li class="item-envio">
-                        <a href="{% url 'rastreo:detalle' codigo=envio.codigo_seguimiento %}">
-                            <span>#{{ <envio class="numero_guia"></envio> }} — {{ envio.producto }}</span>
+                        <a href="{% url 'rastreo:detalle' codigo=envio.numero_guia %}">
+                            <span>#{{ envio.numero_guia }} — {{ envio.producto }}</span>
                             <span class="estado-pill">{{ envio.get_estado_actual_display }}</span>
                         </a>
                     </li>
