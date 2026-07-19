@@ -10,11 +10,6 @@
             --purple-800: #4a1f6a;
             --purple-700: #6c3b8c;
             --purple-600: #8e44ad;
-            --purple-500: #9b59b6;
-            --purple-400: #b38cd9;
-            --purple-300: #c9a8e0;
-            --purple-200: #e0d0f0;
-            --purple-100: #f3ebf9;
             --purple-50: #faf5ff;
             --gradient-hero: linear-gradient(135deg, #4a1f6a, #8e44ad);
             --shadow: 0 8px 24px rgba(75, 30, 110, 0.15);
@@ -48,7 +43,7 @@
         }
 
         .alerta-exito {
-            background: var(--purple-100);
+            background: #f3ebf9;
             color: var(--purple-800);
             border-radius: 12px;
             padding: 12px 18px;
@@ -79,7 +74,7 @@
         }
 
         .detalle-producto {
-            color: var(--purple-500);
+            color: #9b59b6;
             font-size: 0.9rem;
             margin-top: 4px;
         }
@@ -103,14 +98,14 @@
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 600;
-            border: 2px solid var(--purple-200);
+            border: 2px solid #e0d0f0;
             padding: 6px 14px;
             border-radius: 20px;
             transition: 0.2s;
         }
 
         .btn-quitar:hover {
-            background: var(--purple-100);
+            background: #f3ebf9;
         }
 
         .vacio {
@@ -205,7 +200,7 @@
             <div class="vacio">Tu carrito está vacío.</div>
         {% endif %}
 
-        <a href="{% url 'home' %}" class="volver">← Seguir comprando</a>
+        <a href="{% url 'usuarios:home' %}" class="volver">← Seguir comprando</a>
     </div>
 </body>
 </html>

@@ -2,10 +2,10 @@ import uuid
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from inventario.models import Producto
-from rastreo.models import Envio, HistorialEstado
+from django.apps import apps # 🚀 IMPORTANTE: Importamos el buscador de apps de Django
 from .models import Carrito, ItemCarrito
 
+# Quitamos por completo los imports problemáticos de aquí arriba para limpiar VS Code
 
 @login_required
 def ver_carrito(request):
@@ -15,6 +15,9 @@ def ver_carrito(request):
 
 @login_required
 def agregar_al_carrito(request, producto_id):
+    # 🚀 Traemos el modelo Producto dinámicamente de la app 'inventario'
+    Producto = apps.get_model('inventario', 'Producto')
+    
     producto = get_object_or_404(Producto, id=producto_id)
     carrito, _ = Carrito.objects.get_or_create(cliente=request.user)
 
@@ -42,6 +45,10 @@ def confirmar_pago(request):
     if not items:
         messages.warning(request, 'Tu carrito está vacío.')
         return redirect('ver_carrito')
+
+    # 🚀 Traemos los modelos de rastreo dinámicamente de la app 'rastreo'
+    Envio = apps.get_model('rastreo', 'Envio')
+    HistorialEstado = apps.get_model('rastreo', 'HistorialEstado')
 
     envios_creados = []
     for item in items:

@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from inventario.models import Producto
 
 class Carrito(models.Model):
     cliente = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='carrito')
@@ -15,7 +14,7 @@ class Carrito(models.Model):
 
 class ItemCarrito(models.Model):
     carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='items')
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey('inventario.Producto', on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=1)
 
     def subtotal(self):

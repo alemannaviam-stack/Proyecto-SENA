@@ -3,9 +3,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from inventario.models import Producto
+from django.apps import apps
 
 def tienda_home(request):
+    Producto = apps.get_model('inventario', 'Producto') 
+    
     productos = Producto.objects.filter(esta_activo=True)
     return render(request, 'tienda_home.html', {'productos': productos})
 
