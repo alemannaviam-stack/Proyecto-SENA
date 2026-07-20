@@ -3,14 +3,21 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from administracion.models import DisenoSitio
 from django.apps import apps
 
+# ==========================================
+# 1. TIENDA HOME (VISTA PÚBLICA)
+# ==========================================
 def tienda_home(request):
     Producto = apps.get_model('inventario', 'Producto') 
-    
     productos = Producto.objects.filter(esta_activo=True)
     return render(request, 'tienda_home.html', {'productos': productos})
 
+
+# ==========================================
+# 2. INICIO DE SESIÓN (LOGIN)
+# ==========================================
 def login_view(request):
     if request.method == 'POST':
         correo_ingresado = request.POST.get('username')
@@ -30,16 +37,26 @@ def login_view(request):
 
     return render(request, 'registro.html')
 
+
+# ==========================================
+# 3. REDIRECCIÓN DINÁMICA POR ROL
+# ==========================================
 def redirect_por_rol(user):
     rol = user.perfil.rol
 
     if rol == 'PROVEEDOR':
-        return redirect('usuarios:dashboard_proveedor')
+        # 🌟 CORREGIDO: Apunta a la función 'dashboard' de esta app con su namespace
+        return redirect('usuarios:dashboard')
     elif rol == 'ADMIN':
-        return redirect('usuarios:dashboard_admin')
+        # 🌟 CORREGIDO: Redirige al namespace de la app independiente 'administracion'
+        return redirect('administracion:dashboard')
     else:  # CLIENTE
         return redirect('usuarios:tienda_home')
-    
+
+
+# ==========================================
+# 4. REGISTRO DE USUARIOS NUEVOS
+# ==========================================
 def registro(request):
     if request.method == 'POST':
         usuario = request.POST.get('username')
@@ -52,18 +69,39 @@ def registro(request):
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
         
         auth_login(request, nuevo_usuario)
-        # 🌟 Único cambio: Añadido 'usuarios:' antes de 'tienda_home'
         return redirect('usuarios:tienda_home')
         
     return render(request, 'registro.html')
 
-@login_required(login_url='login')
+
+# ==========================================
+# 5. PERFIL DE USUARIO
+# ==========================================
+@login_required(login_url='usuarios:login')  # 🌟 CORREGIDO: Namespace del login
 def perfil(request):
     return render(request, 'perfil.html')
 
+
+# ==========================================
+# 6. DASHBOARD / PANEL DEL PROVEEDOR
+# ==========================================
 @login_required(login_url='usuarios:login')
 def dashboard(request):
     if request.user.perfil.rol != 'PROVEEDOR':
         return redirect('usuarios:tienda_home')
         
     return render(request, 'dashboard_proveedor.html')
+
+# ==========================================
+# 7. PÁGINA PRINCIPAL DE LA TIENDA
+# ==========================================
+def tienda_home(request):
+    productos = Producto.objects.all()
+ 
+    diseno = DisenoSitio.cargar()
+ 
+    return render(request, 'usuarios/pagina_principal.html', {
+        'productos': productos,
+        'diseno': diseno,  
+    })
+ 
