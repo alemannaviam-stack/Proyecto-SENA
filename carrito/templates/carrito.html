@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Mi Carrito</title>
     <style>
-        /* Tu CSS aquí (el que te gustó) */
         :root {
             --purple-900: #2d1b4e;
             --purple-800: #4a1f6a;
@@ -58,25 +57,6 @@
             max-width: 750px;
             margin: -30px auto 40px;
             padding: 0 20px;
-        }
-
-        .debug-box {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            font-family: monospace;
-            font-size: 13px;
-        }
-
-        .debug-box strong {
-            color: #856404;
-        }
-
-        .debug-box .item {
-            padding: 4px 0;
-            border-bottom: 1px solid #ffe69b;
         }
 
         .alerta-exito {
@@ -136,11 +116,7 @@
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 600;
-<<<<<<< HEAD
             border: 2px solid #fde8e8;
-=======
-            border: 2px solid #e0d0f0;
->>>>>>> 8bba2854a077e1ac004f18811f600c9ec7af526b
             padding: 6px 14px;
             border-radius: 20px;
             transition: 0.2s;
@@ -148,12 +124,8 @@
         }
 
         .btn-quitar:hover {
-<<<<<<< HEAD
             background: #fde8e8;
             border-color: #e74c3c;
-=======
-            background: #f3ebf9;
->>>>>>> 8bba2854a077e1ac004f18811f600c9ec7af526b
         }
 
         .vacio {
@@ -266,22 +238,6 @@
     </div>
 
     <div class="contenedor-carrito">
-        <div class="debug-box">
-            <strong>🔍 DEBUG - Información del carrito:</strong><br>
-            Usuario: {{ request.user.username }}<br>
-            Carrito ID: {{ carrito.id }}<br>
-            Total items: {{ carrito.items.all|length }}<br>
-            {% if carrito.items.all %}
-                <br><strong>Items encontrados:</strong><br>
-                {% for item in carrito.items.all %}
-                    <div class="item">✅ {{ item.producto.nombre }} - Cantidad: {{ item.cantidad }} - Subtotal: ${{ item.subtotal }}</div>
-                {% endfor %}
-            {% else %}
-                <br>❌ <strong>No hay items en el carrito</strong><br>
-                <small>Revisa que el producto se haya guardado correctamente.</small>
-            {% endif %}
-        </div>
-
         {% if messages %}
             {% for message in messages %}
                 <div class="alerta-exito">✅ {{ message }}</div>
@@ -307,15 +263,19 @@
                     <span>Total</span>
                     <span>${{ carrito.total }} COP</span>
                 </div>
-                <a href="{% url 'carrito:confirmar_pago' %}" class="btn-pagar">💳 Pagar ahora</a>
+                <a href="{% url 'carrito:checkout' %}" class="btn-pagar">💳 Continuar con el pedido</a>
             </div>
         {% else %}
-            <div style="text-align: center; margin: 20px 0;">
-                <p>Tu carrito está vacío.</p>
+            <div class="vacio">
+                <span class="vacio-icono">🛒</span>
+                <h3>Tu carrito está vacío</h3>
+                <p>Agrega productos para verlos aquí.</p>
             </div>
         {% endif %}
 
-        <a href="{% url 'usuarios:tienda_home' %}" class="volver">← Seguir comprando</a>
+        <div class="volver-wrapper">
+            <a href="{% url 'usuarios:tienda_home' %}" class="volver">← Seguir comprando</a>
+        </div>
     </div>
 </body>
 </html>

@@ -152,7 +152,9 @@
       data-category="{% if producto.categoria %}{{ producto.categoria.nombre|lower }}{% else %}otros{% endif %}"
       data-new="true" data-store="true"
       data-title="{{ producto.nombre }}" data-ref="{{ producto.id }}" data-price="{{ producto.precio }}"
-      data-desc="{{ producto.descripcion }}">
+      data-desc="{{ producto.descripcion }}"
+      data-agregar-url="{% url 'carrito:agregar_al_carrito' producto_id=producto.id %}"
+      data-comprar-url="{% url 'carrito:comprar_ahora' producto_id=producto.id %}">
       
       <div class="product-media">
         {% if producto.imagen %}
@@ -173,7 +175,7 @@
         <span class="product-ref">{{ producto.marca|default:"" }}</span>
         <div class="product-footer">
           <span class="product-price">$ {{ producto.precio }} COP</span>
-          <a href="{% url 'carrito:agregar_al_carrito' producto_id=producto.id %}" class="btn-add" style="text-decoration: none; text-align: center; display: inline-block;">Agregar</a>
+          <button class="btn-add btn-add-real" data-url="{% url 'carrito:agregar_al_carrito' producto_id=producto.id %}">Agregar</button>
         </div>
       </div>
     </article>
@@ -277,7 +279,18 @@
         <p class="modal-desc" id="modalDesc"></p>
         <div class="modal-footer">
           <span class="product-price" id="modalPrice"></span>
-          <button class="btn-add" id="modalAdd">Agregar al carrito</button>
+        </div>
+
+        <div class="product-buy-row modal-buy-row">
+          <div class="qty-selector" data-qty="1" id="modalQtySelector">
+            <button type="button" class="qty-btn qty-minus" aria-label="Restar cantidad">−</button>
+            <span class="qty-value">1</span>
+            <button type="button" class="qty-btn qty-plus" aria-label="Sumar cantidad">+</button>
+          </div>
+          <div class="product-buy-actions">
+            <button class="btn-add btn-add-real" id="modalAddReal" data-url="">Agregar al carrito</button>
+            <a href="#" class="btn-comprar-ahora" id="modalComprarAhora" data-base-url="">Comprar ahora</a>
+          </div>
         </div>
       </div>
     </div>

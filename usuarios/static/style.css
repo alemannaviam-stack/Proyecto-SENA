@@ -427,12 +427,13 @@ img {
 }
 
 /* ===== PRODUCT GRID ===== */
+/* 4 productos por hilera en escritorio */
 .product-grid {
   max-width: 1280px;
   margin: 1.5rem auto 2rem;
   padding: 0 1.5rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
 
@@ -455,15 +456,15 @@ img {
 .product-media {
   position: relative;
   background: var(--purple-100);
-  padding: 1rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 180px;
+  min-height: 260px;
   background: linear-gradient(135deg, var(--purple-100), var(--purple-200));
 }
 .product-media img {
-  max-height: 150px;
+  max-height: 220px;
   object-fit: contain;
   border-radius: 8px;
 }
@@ -472,13 +473,13 @@ img {
 }
 .product-media .badge-new {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  top: 0.7rem;
+  left: 0.7rem;
   background: var(--purple-600);
   color: #fff;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.2rem 0.8rem;
+  padding: 0.25rem 0.9rem;
   border-radius: 30px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -486,15 +487,15 @@ img {
 }
 .card-actions {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 0.7rem;
+  right: 0.7rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 .pill-btn {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(4px);
@@ -517,13 +518,13 @@ img {
 }
 
 .product-info {
-  padding: 0.8rem 1rem 1rem;
+  padding: 1.1rem 1.3rem 1.3rem;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 .product-category {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--purple-500);
@@ -531,17 +532,17 @@ img {
 }
 .product-title {
   font-family: 'Baloo 2', cursive;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--purple-900);
-  margin: 0.2rem 0 0.1rem;
+  margin: 0.3rem 0 0.15rem;
   line-height: 1.3;
 }
 .product-ref {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--purple-400);
   font-weight: 500;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.3rem;
 }
 .product-detail {
   font-size: 0.75rem;
@@ -555,26 +556,99 @@ img {
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
-  padding-top: 0.6rem;
+  padding-top: 0.9rem;
   border-top: 1px solid var(--purple-100);
 }
 .product-price {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: var(--purple-800);
 }
 .btn-add {
   background: var(--purple-600);
   color: #fff;
-  padding: 0.3rem 1.2rem;
+  padding: 0.5rem 1.4rem;
   border-radius: 30px;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   transition: 0.2s;
   border: 1px solid transparent;
 }
 .btn-add:hover {
   background: var(--purple-700);
+  transform: scale(1.02);
+}
+
+/* ===== SELECTOR DE CANTIDAD + COMPRAR AHORA (usado en el modal / tarjeta grande) ===== */
+.product-buy-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem;
+  background: var(--purple-50);
+  border: 1px solid var(--purple-200);
+  border-radius: 30px;
+  padding: 0.2rem 0.4rem;
+  flex-shrink: 0;
+}
+.qty-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--purple-100);
+  color: var(--purple-800);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  line-height: 1;
+}
+.qty-btn:hover {
+  background: var(--purple-300);
+}
+.qty-value {
+  min-width: 18px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--purple-900);
+}
+
+.product-buy-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+.product-buy-actions .btn-add {
+  width: 100%;
+  text-align: center;
+}
+
+/* Botón "Comprar ahora": color sólido bien oscuro, más oscuro que "Agregar" (--purple-600) */
+.btn-comprar-ahora {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: var(--purple-900);
+  color: #fff;
+  padding: 0.35rem 1rem;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: 0.2s;
+}
+.btn-comprar-ahora:hover {
+  background: #1c1032;
   transform: scale(1.02);
 }
 
@@ -587,7 +661,7 @@ img {
   margin: 0 auto;
 }
 
-/* ===== MODAL ===== */
+/* ===== MODAL (tarjeta grande) ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -690,8 +764,26 @@ img {
 .modal-footer .product-price {
   font-size: 1.6rem;
 }
-.modal-footer .btn-add {
-  padding: 0.6rem 2rem;
+
+/* Fila de cantidad + botones dentro del modal, un poco más grande que en la tarjeta pequeña */
+.modal-buy-row {
+  margin-top: 1rem;
+}
+.modal-buy-row .qty-selector {
+  padding: 0.3rem 0.5rem;
+}
+.modal-buy-row .qty-btn {
+  width: 28px;
+  height: 28px;
+  font-size: 1.1rem;
+}
+.modal-buy-row .qty-value {
+  font-size: 0.95rem;
+  min-width: 22px;
+}
+.modal-buy-row .btn-add,
+.modal-buy-row .btn-comprar-ahora {
+  padding: 0.55rem 1rem;
   font-size: 0.9rem;
 }
 
@@ -853,6 +945,12 @@ img {
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .top-header {
     flex-wrap: wrap;
@@ -886,8 +984,21 @@ img {
     font-size: 1.5rem;
   }
   .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+  }
+  .product-media {
+    min-height: 200px;
+    padding: 1rem;
+  }
+  .product-media img {
+    max-height: 170px;
+  }
+  .product-title {
+    font-size: 1.1rem;
+  }
+  .product-price {
+    font-size: 1.1rem;
   }
   .footer-columns {
     grid-template-columns: 1fr 1fr;
@@ -900,6 +1011,22 @@ img {
   .product-grid {
     grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
+  }
+  .product-media {
+    min-height: 160px;
+    padding: 0.8rem;
+  }
+  .product-media img {
+    max-height: 130px;
+  }
+  .product-title {
+    font-size: 1rem;
+  }
+  .product-price {
+    font-size: 1rem;
+  }
+  .product-info {
+    padding: 0.8rem 0.9rem 1rem;
   }
   .quickview-modal {
     padding: 1rem;

@@ -12,11 +12,28 @@ class Envio(models.Model):
         ('cancelado', 'Cancelado'),
     ]
 
+    METODOS_PAGO = [
+        ('nequi', 'Nequi'),
+        ('tarjeta', 'Tarjeta (Visa/Mastercard)'),
+        ('pse', 'PSE'),
+        ('mercadopago', 'Mercado Pago'),
+        ('contraentrega', 'Pago contraentrega'),
+    ]
+
     cliente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='envios')
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     estado_actual = models.CharField(max_length=20, choices=ESTADOS, default='preparando')
     numero_guia = models.CharField(max_length=20, unique=True)
+
+    # Datos de envío (capturados en el checkout)
+    nombre_destinatario = models.CharField(max_length=150, blank=True)
+    telefono = models.CharField(max_length=20, blank=True)
+    correo = models.EmailField(blank=True)
+    direccion = models.CharField(max_length=255, blank=True)
+    departamento = models.CharField(max_length=100, blank=True)
+    ciudad = models.CharField(max_length=100, blank=True)
+    metodo_pago = models.CharField(max_length=20, choices=METODOS_PAGO, blank=True)
 
     def __str__(self):
         return f"Envío #{self.numero_guia} - {self.cliente}"

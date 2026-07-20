@@ -30,6 +30,7 @@
       // Favoritos y carrito (contadores)
       const favCount = document.getElementById('favCount');
       const cartCount = document.getElementById('cartCount');
+      const favToggleBtn = document.getElementById('favToggleBtn');
 
       // Modal
       const modalOverlay = document.getElementById('modalOverlay');
@@ -40,7 +41,9 @@
       const modalRef = document.getElementById('modalRef');
       const modalDesc = document.getElementById('modalDesc');
       const modalPrice = document.getElementById('modalPrice');
-      const modalAdd = document.getElementById('modalAdd');
+      const modalAddReal = document.getElementById('modalAddReal');
+      const modalComprarAhora = document.getElementById('modalComprarAhora');
+      const modalQtySelector = document.getElementById('modalQtySelector');
 
       // Toast
       const toastContainer = document.getElementById('toastContainer');
@@ -49,7 +52,8 @@
       let activeFilters = {
         search: '',
         categories: [], // array de 'capilar', 'facial', 'maquillaje'
-        nav: 'inicio' // 'inicio' | 'capilar' | 'tiendas' | 'nueva'
+        nav: 'inicio', // 'inicio' | 'capilar' | 'tiendas' | 'nueva'
+        favoritesOnly: false
       };
 
       let favorites = new Set(); // almacena referencias (data-ref)
@@ -64,7 +68,9 @@
           title: card.dataset.title,
           ref: card.dataset.ref,
           price: parseInt(card.dataset.price, 10),
-          desc: card.dataset.desc
+          desc: card.dataset.desc,
+          agregarUrl: card.dataset.agregarUrl,
+          comprarUrl: card.dataset.comprarUrl
         };
       }
 
@@ -118,14 +124,20 @@
             matchNav = data.new === true;
           } // 'inicio' -> todos
 
-          const show = matchSearch && matchCat && matchNav;
+          // Solo favoritos (activado desde el corazón del header)
+          let matchFav = true;
+          if (activeFilters.favoritesOnly) {
+            matchFav = favorites.has(data.ref);
+          }
+
+          const show = matchSearch && matchCat && matchNav && matchFav;
           card.style.display = show ? '' : 'none';
           if (show) visible++;
         });
 
-        // Actualizar contador
-        resultCount.textContent = visible;
-        emptyState.hidden = visible > 0;
+        // Actualizar contador (protegido: en esta página no existe #resultCount)
+        if (resultCount) resultCount.textContent = visible;
+        if (emptyState) emptyState.hidden = visible > 0;
 
         // Actualizar pills
         renderPills();
@@ -139,6 +151,9 @@
 
       // ---------- Pills (filtros activos) ----------
       function renderPills() {
+        // Protegido: en esta página no existe #activePills
+        if (!activePills) return;
+
         const pills = [];
         const search = activeFilters.search.trim();
         if (search) {
@@ -151,6 +166,10 @@
         if (nav === 'capilar') pills.push({ label: 'Capilar', type: 'nav' });
         else if (nav === 'tiendas') pills.push({ label: 'Tiendas', type: 'nav' });
         else if (nav === 'nueva') pills.push({ label: 'Nueva Colección', type: 'nav' });
+
+        if (activeFilters.favoritesOnly) {
+          pills.push({ label: '❤️ Favoritos', type: 'favorites' });
+        }
 
         if (pills.length === 0) {
           activePills.innerHTML = '';
@@ -183,6 +202,10 @@
             } else if (type === 'nav') {
               // resetear nav a 'inicio'
               activeFilters.nav = 'inicio';
+            } else if (type === 'favorites') {
+              activeFilters.favoritesOnly = false;
+              favToggleBtn.classList.remove('active');
+              favToggleBtn.setAttribute('aria-pressed', 'false');
             }
             filterProducts();
           });
@@ -230,8 +253,12 @@
       // ---------- Eventos de navegación (nav) ----------
       navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-          e.preventDefault();
           const navVal = this.dataset.nav;
+          // Links como "Mis pedidos" no tienen data-nav: son navegación real,
+          // no un filtro, así que los dejamos funcionar normal (sin preventDefault).
+          if (!navVal) return;
+
+          e.preventDefault();
           // Si es 'inicio' o 'tiendas' o 'nueva' o 'capilar'
           if (navVal === 'inicio') {
             activeFilters.nav = 'inicio';
@@ -285,25 +312,46 @@
           if (!card) return;
           const ref = card.dataset.ref;
           if (!ref) return;
+          const iconUse = this.querySelector('svg use');
           const isFav = favorites.has(ref);
           if (isFav) {
             favorites.delete(ref);
             this.classList.remove('active');
             this.setAttribute('aria-pressed', 'false');
+            if (iconUse) iconUse.setAttribute('href', '#i-heart');
             showToast('Eliminado de favoritos');
           } else {
             favorites.add(ref);
             this.classList.add('active');
             this.setAttribute('aria-pressed', 'true');
+            if (iconUse) iconUse.setAttribute('href', '#i-heart-fill');
             showToast('Agregado a favoritos ❤️');
           }
           favCount.textContent = favorites.size;
           favCount.hidden = favorites.size === 0;
+          // Si estamos viendo "solo favoritos", refrescar para que desaparezca
+          // al instante si se acaba de desmarcar
+          if (activeFilters.favoritesOnly) filterProducts();
         });
       });
 
+      // Corazón del header: alterna entre "ver todo" y "ver solo mis favoritos"
+      favToggleBtn.addEventListener('click', function() {
+        activeFilters.favoritesOnly = !activeFilters.favoritesOnly;
+        this.classList.toggle('active', activeFilters.favoritesOnly);
+        this.setAttribute('aria-pressed', String(activeFilters.favoritesOnly));
+        const iconUse = this.querySelector('svg use');
+        if (iconUse) iconUse.setAttribute('href', activeFilters.favoritesOnly ? '#i-heart-fill' : '#i-heart');
+        if (activeFilters.favoritesOnly && favorites.size === 0) {
+          showToast('Todavía no marcaste ningún favorito 💜');
+        }
+        filterProducts();
+      });
+
       // ---------- Carrito ----------
-      document.querySelectorAll('.btn-add').forEach(btn => {
+      // Carrito "falso" solo para botones que no tienen la clase btn-add-real
+      // (compatibilidad hacia atrás; en esta página todos los "Agregar" ya usan btn-add-real)
+      document.querySelectorAll('.btn-add:not(.btn-add-real)').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
           const card = this.closest('.product-card');
@@ -312,7 +360,6 @@
           const title = card.dataset.title;
           const price = parseInt(card.dataset.price, 10);
           if (!ref || !title) return;
-          // Verificar si ya está en el carrito
           const existing = cart.find(item => item.ref === ref);
           if (existing) {
             showToast('Ya está en el carrito');
@@ -325,7 +372,82 @@
         });
       });
 
-      // ---------- Vista rápida (modal) ----------
+      // Botón real de "Agregar": usa fetch, no recarga la página.
+      // Funciona tanto en la tarjeta pequeña (sin selector de cantidad -> 1 unidad)
+      // como en el modal / tarjeta grande (con su propio selector de cantidad).
+      document.querySelectorAll('.btn-add-real').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const url = this.dataset.url;
+          if (!url) return;
+
+          const buyRow = this.closest('.product-buy-row');
+          const qtySelector = buyRow ? buyRow.querySelector('.qty-selector') : null;
+          const cantidad = qtySelector ? (parseInt(qtySelector.dataset.qty, 10) || 1) : 1;
+
+          fetch(`${url}?cantidad=${cantidad}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                showToast(data.mensaje);
+                cartCount.textContent = data.total_items;
+                cartCount.hidden = data.total_items === 0;
+                if (this.id === 'modalAddReal') {
+                  modalOverlay.hidden = true;
+                }
+              }
+            })
+            .catch(() => {
+              showToast('No se pudo agregar el producto, intenta de nuevo.');
+            });
+        });
+      });
+
+      // Botón "Comprar ahora" (vive dentro del modal / tarjeta grande):
+      // manda la cantidad elegida y va directo al checkout, sin pasar por el carrito
+      document.querySelectorAll('.btn-comprar-ahora').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const baseUrl = this.dataset.baseUrl;
+          if (!baseUrl) return;
+
+          const buyRow = this.closest('.product-buy-row');
+          const qtySelector = buyRow ? buyRow.querySelector('.qty-selector') : null;
+          const cantidad = qtySelector ? (parseInt(qtySelector.dataset.qty, 10) || 1) : 1;
+
+          window.location.href = `${baseUrl}?cantidad=${cantidad}`;
+        });
+      });
+
+      // Selector de cantidad (+/-): aplica al selector del modal (la tarjeta pequeña ya no tiene uno)
+      document.querySelectorAll('.qty-selector').forEach(sel => {
+        const minusBtn = sel.querySelector('.qty-minus');
+        const plusBtn = sel.querySelector('.qty-plus');
+        const valueEl = sel.querySelector('.qty-value');
+
+        function getQty() {
+          return parseInt(sel.dataset.qty, 10) || 1;
+        }
+        function setQty(n) {
+          if (n < 1) n = 1;
+          sel.dataset.qty = n;
+          valueEl.textContent = n;
+        }
+
+        minusBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          setQty(getQty() - 1);
+        });
+        plusBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          setQty(getQty() + 1);
+        });
+      });
+
+      // ---------- Vista rápida (modal / tarjeta grande) ----------
       document.querySelectorAll('.btn-view').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
@@ -334,6 +456,7 @@
           const data = getProductData(card);
           const imgSrc = card.querySelector('.product-media img')?.src || '';
           const marca = card.querySelector('.product-ref')?.textContent || '';
+
           // Llenar modal
           modalMedia.innerHTML = `<img src="${imgSrc}" alt="${data.title}" loading="lazy">`;
           modalCategory.textContent = data.category.charAt(0).toUpperCase() + data.category.slice(1);
@@ -341,9 +464,16 @@
           modalRef.textContent = marca;
           modalDesc.textContent = data.desc || 'Sin descripción';
           modalPrice.textContent = formatPrice(data.price);
-          modalAdd.dataset.ref = data.ref;
-          modalAdd.dataset.title = data.title;
-          modalAdd.dataset.price = data.price;
+
+          // URLs reales del producto para Agregar / Comprar ahora dentro del modal
+          modalAddReal.dataset.url = data.agregarUrl || '';
+          modalComprarAhora.dataset.baseUrl = data.comprarUrl || '';
+          modalComprarAhora.setAttribute('href', data.comprarUrl || '#');
+
+          // Reiniciar la cantidad a 1 cada vez que se abre el modal
+          modalQtySelector.dataset.qty = 1;
+          modalQtySelector.querySelector('.qty-value').textContent = 1;
+
           modalOverlay.hidden = false;
         });
       });
@@ -354,24 +484,6 @@
 
       modalOverlay.addEventListener('click', function(e) {
         if (e.target === this) modalOverlay.hidden = true;
-      });
-
-      // Botón agregar del modal
-      modalAdd.addEventListener('click', function() {
-        const ref = this.dataset.ref;
-        const title = this.dataset.title;
-        const price = parseInt(this.dataset.price, 10);
-        if (!ref || !title) return;
-        const existing = cart.find(item => item.ref === ref);
-        if (existing) {
-          showToast('Ya está en el carrito');
-          return;
-        }
-        cart.push({ ref, title, price });
-        cartCount.textContent = cart.length;
-        cartCount.hidden = cart.length === 0;
-        showToast(`"${title}" agregado al carrito 🛒`);
-        modalOverlay.hidden = true;
       });
 
       // ---------- Hero carrusel ----------
