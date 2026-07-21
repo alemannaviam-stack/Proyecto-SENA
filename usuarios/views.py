@@ -4,22 +4,22 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import Perfil 
 from django.apps import apps
+from .models import Perfil
 
 # ==========================================
 # 1. TIENDA HOME (VISTA PÚBLICA)
 # ==========================================
 def tienda_home(request):
-  
     Producto = apps.get_model('inventario', 'Producto')
     DisenoSitio = apps.get_model('administracion', 'DisenoSitio')
-    productos = Producto.objects.all()
+
+    productos = Producto.objects.filter(esta_activo=True)
     diseno = DisenoSitio.cargar()
-    
+
     return render(request, 'tienda_home.html', {
         'productos': productos,
-        'diseno': diseno,  
+        'diseno': diseno,
     })
 
 # ==========================================
@@ -46,7 +46,7 @@ def login_view(request):
 
 
 # ==========================================
-# 2. REDIRECCIÓN DINÁMICA POR ROL
+# 3. REDIRECCIÓN DINÁMICA POR ROL
 # ==========================================
 def redirect_por_rol(user):
     rol = user.perfil.rol
@@ -60,7 +60,7 @@ def redirect_por_rol(user):
 
 
 # ==========================================
-# 3. REGISTRO DE USUARIOS NUEVOS
+# 4. REGISTRO DE USUARIOS NUEVOS
 # ==========================================
 def registro(request):
     if request.method == 'POST':
@@ -73,6 +73,7 @@ def registro(request):
             return render(request, 'registro.html', {'error': 'El usuario o correo ya existen.'})
 
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
+
         # La señal post_save ya creó el Perfil con rol='CLIENTE' por defecto.
         # Aquí lo ajustamos según lo que eligió en el formulario.
         perfil_obj = nuevo_usuario.perfil
@@ -90,8 +91,9 @@ def registro(request):
 
     return render(request, 'registro.html')
 
+
 # ==========================================
-# 4. PERFIL DE USUARIO
+# 5. PERFIL DE USUARIO
 # ==========================================
 @login_required(login_url='usuarios:login')
 def perfil(request):
@@ -99,25 +101,11 @@ def perfil(request):
 
 
 # ==========================================
-# 5. DASHBOARD / PANEL DEL PROVEEDOR
+# 6. DASHBOARD / PANEL DEL PROVEEDOR
 # ==========================================
 @login_required(login_url='usuarios:login')
 def dashboard(request):
     if request.user.perfil.rol != 'PROVEEDOR':
         return redirect('usuarios:tienda_home')
 
-    return redirect('dashboard')  # redirige a inventario:dashboard, la vista completa con productos
-
-
-# ==========================================
-# 6. PÁGINA PRINCIPAL DE LA TIENDA (VISTA PÚBLICA)
-# ==========================================
-def tienda_home(request):
-    Producto = apps.get_model('inventario', 'Producto')
-    productos = Producto.objects.filter(esta_activo=True)
-    diseno = DisenoSitio.cargar()
-
-    return render(request, 'tienda_home.html', {
-        'productos': productos,
-        'diseno': diseno,
-    })
+    return render(request, 'dashboard.html')
