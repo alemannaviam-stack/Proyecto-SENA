@@ -2,14 +2,6 @@ from django.db import models
 
 
 class DisenoSitio(models.Model):
-<<<<<<< HEAD
-    nombre_sitio = models.CharField(max_length=100, default="Nebula")
-    logo = models.ImageField(upload_to='diseno/', blank=True, null=True)
-    color_principal = models.CharField(max_length=7, default="#000000")
-
-    def __str__(self):
-        return self.nombre_sitio
-=======
     """
     Modelo tipo 'singleton': siempre existe un único registro (pk=1)
     que guarda el contenido editable del carrusel de la tienda pública.
@@ -65,16 +57,11 @@ class DisenoSitio(models.Model):
 
     def delete(self, *args, **kwargs):
         pass  # evita que se borre el único registro por accidente
->>>>>>> 72888ac71eefe42c07173a283440374fbb2ea2a2
 
     @classmethod
     def cargar(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
-<<<<<<< HEAD
-        return obj
-=======
         return obj
 
     def __str__(self):
         return "Configuración de diseño (carrusel de inicio)"
->>>>>>> 72888ac71eefe42c07173a283440374fbb2ea2a2
