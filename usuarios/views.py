@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from administracion.models import DisenoSitio
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
@@ -7,9 +8,6 @@ from .models import Perfil
 from django.apps import apps
 
 # ==========================================
-<<<<<<< HEAD
-# 1. INICIO DE SESIÓN (LOGIN)
-=======
 # 1. TIENDA HOME (VISTA PÚBLICA)
 # ==========================================
 def tienda_home(request):
@@ -26,7 +24,6 @@ def tienda_home(request):
 
 # ==========================================
 # 2. INICIO DE SESIÓN (LOGIN)
->>>>>>> 72888ac71eefe42c07173a283440374fbb2ea2a2
 # ==========================================
 def login_view(request):
     if request.method == 'POST':
@@ -70,23 +67,10 @@ def registro(request):
         usuario = request.POST.get('username')
         correo = request.POST.get('email')
         clave = request.POST.get('password')
-<<<<<<< HEAD
-
-        if User.objects.filter(username=usuario).exists() or User.objects.filter(email=correo).exists():
-            return render(request, 'registro.html', {'error': 'El usuario o correo ya existen.'})
-
-        nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
-
-        auth_login(request, nuevo_usuario)
-        return redirect('usuarios:tienda_home')
-
-    return render(request, 'registro.html')
-=======
         tipo_cuenta = request.POST.get('tipo_cuenta', 'CLIENTE')  # 'CLIENTE' o 'PROVEEDOR'
 
         if User.objects.filter(username=usuario).exists() or User.objects.filter(email=correo).exists():
             return render(request, 'registro.html', {'error': 'El usuario o correo ya existen.'})
->>>>>>> 72888ac71eefe42c07173a283440374fbb2ea2a2
 
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
         # La señal post_save ya creó el Perfil con rol='CLIENTE' por defecto.
@@ -121,7 +105,6 @@ def perfil(request):
 def dashboard(request):
     if request.user.perfil.rol != 'PROVEEDOR':
         return redirect('usuarios:tienda_home')
-<<<<<<< HEAD
 
     return redirect('dashboard')  # redirige a inventario:dashboard, la vista completa con productos
 
@@ -138,7 +121,3 @@ def tienda_home(request):
         'productos': productos,
         'diseno': diseno,
     })
-=======
-        
-    return render(request, 'dashboard_proveedor.html')
->>>>>>> 72888ac71eefe42c07173a283440374fbb2ea2a2

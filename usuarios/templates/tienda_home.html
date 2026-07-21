@@ -89,17 +89,39 @@
             <span>Categorías</span>
           </button>
           <div class="dropdown-menu" id="dropdownMenu">
-            <label><input type="checkbox" value="capilar" class="cat-check"> Capilar</label>
-            <label><input type="checkbox" value="facial" class="cat-check"> Facial</label>
-            <label><input type="checkbox" value="maquillaje" class="cat-check"> Maquillaje</label>
+
+            <div class="cat-grupo">
+              <span class="cat-grupo-titulo">Cuidado del cabello</span>
+              <label><input type="checkbox" value="shampoo" class="cat-check"> Shampoo</label>
+              <label><input type="checkbox" value="acondicionador" class="cat-check"> Acondicionador</label>
+              <label><input type="checkbox" value="termoprotectores" class="cat-check"> Termoprotectores</label>
+              <label><input type="checkbox" value="mascarillas" class="cat-check"> Mascarillas</label>
+            </div>
+
+            <div class="cat-grupo">
+              <span class="cat-grupo-titulo">Skincare</span>
+              <label><input type="checkbox" value="cremas" class="cat-check"> Cremas</label>
+              <label><input type="checkbox" value="tonicos" class="cat-check"> Tónicos</label>
+              <label><input type="checkbox" value="desmaquillantes" class="cat-check"> Desmaquillantes</label>
+              <label><input type="checkbox" value="parches para ojos" class="cat-check"> Parches para ojos</label>
+              <label><input type="checkbox" value="antiarrugas" class="cat-check"> Antiarrugas</label>
+            </div>
+
+            <div class="cat-grupo">
+              <span class="cat-grupo-titulo">Maquillaje</span>
+              <label><input type="checkbox" value="rubor" class="cat-check"> Rubor</label>
+              <label><input type="checkbox" value="bases" class="cat-check"> Bases</label>
+              <label><input type="checkbox" value="sombras" class="cat-check"> Sombras</label>
+              <label><input type="checkbox" value="labiales" class="cat-check"> Labiales</label>
+              <label><input type="checkbox" value="pestañinas" class="cat-check"> Pestañinas</label>
+            </div>
+
             <button class="cat-reset" id="catReset" type="button">Limpiar filtros</button>
           </div>
         </div>
 
         <ul class="nav-links" id="navLinks">
           <li><a href="#inicio" data-nav="inicio" class="active-link">Inicio</a></li>
-          <li><a href="#grid" data-nav="capilar">Capilar</a></li>
-          <li><a href="#grid" data-nav="tiendas">Tiendas</a></li>
           <li><a href="#grid" data-nav="nueva">Nueva Colección</a></li>
           <li><a href="/rastreo/mis-envios/">Mis pedidos</a></li>
         </ul>
@@ -121,6 +143,9 @@
       <p class="hero-copy">{{ diseno.slide1_texto }}</p>
       <a href="#grid" class="hero-cta">Ver catálogo</a>
     </article>
+
+   
+
  
     <!-- Slide 2 -->
     <article class="hero-slide" style="--slide-a:{{ diseno.slide2_color_a }}; --slide-b:{{ diseno.slide2_color_b }};">

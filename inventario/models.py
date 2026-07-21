@@ -5,10 +5,23 @@ from django.contrib.auth.models import User
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField(blank=True, null=True)
+    categoria_padre = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='subcategorias',
+        help_text="Déjalo vacío si esta es una categoría principal (ej. 'Cuidado del cabello')"
+    )
 
     def __str__(self):
+        if self.categoria_padre:
+            return f"{self.categoria_padre.nombre} → {self.nombre}"
         return self.nombre
 
+    class Meta:
+        verbose_name = "Categoría"
+        verbose_name_plural = "Categorías"
 
 class Producto(models.Model):
     proveedor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='productos')
