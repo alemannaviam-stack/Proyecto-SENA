@@ -7,8 +7,6 @@ from .models import Carrito, ItemCarrito
 
 
 def _cantidad_valida(valor_crudo):
-    """Convierte lo que venga en la URL/form a un entero >= 1, sin explotar
-    si mandan basura (texto, negativos, vacío, etc)."""
     try:
         cantidad = int(valor_crudo)
     except (TypeError, ValueError):
@@ -44,7 +42,6 @@ def agregar_al_carrito(request, producto_id):
 
     total_items = carrito.items.count()
 
-    # Si la petición viene de JavaScript (fetch), responde en JSON sin recargar la página
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({
             'success': True,
@@ -52,16 +49,12 @@ def agregar_al_carrito(request, producto_id):
             'total_items': total_items,
         })
 
-    # Si alguien entra al link directo (sin JS), se comporta como antes
     messages.success(request, f'{producto.nombre} añadido al carrito.')
     return redirect(request.META.get('HTTP_REFERER', 'usuarios:tienda_home'))
 
 
 @login_required
 def comprar_ahora(request, producto_id):
-    """Botón 'Comprar ahora': no toca el carrito de la base de datos.
-    Guarda el producto y la cantidad elegida en la sesión, y manda
-    directo al checkout con ese único producto."""
     Producto = apps.get_model('inventario', 'Producto')
     producto = get_object_or_404(Producto, id=producto_id)
 
@@ -83,10 +76,6 @@ def quitar_item(request, item_id):
 
 @login_required
 def checkout(request):
-    """Muestra el formulario de datos de envío y método de pago.
-    Funciona en dos modos:
-      - Compra directa (viene del botón 'Comprar ahora' de un producto puntual).
-      - Compra normal (usa lo que el usuario tiene guardado en su carrito)."""
     compra_directa = request.session.get('compra_directa')
 
     if compra_directa:
@@ -155,12 +144,15 @@ def confirmar_pago(request):
     for item in items:
         # item puede ser un dict (compra directa) o un ItemCarrito (carrito normal)
         producto_item = item['producto'] if isinstance(item, dict) else item.producto
+        cantidad_item = item['cantidad'] if isinstance(item, dict) else item.cantidad
 
         numero_guia = str(uuid.uuid4())[:8].upper()
         envio = Envio.objects.create(
             cliente=request.user,
             producto=producto_item,
             numero_guia=numero_guia,
+            cantidad=cantidad_item,
+            precio_unitario=producto_item.precio,
             nombre_destinatario=nombre,
             telefono=telefono,
             correo=correo,

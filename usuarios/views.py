@@ -7,16 +7,7 @@ from administracion.models import DisenoSitio
 from django.apps import apps
 
 # ==========================================
-# 1. TIENDA HOME (VISTA PÚBLICA)
-# ==========================================
-def tienda_home(request):
-    Producto = apps.get_model('inventario', 'Producto') 
-    productos = Producto.objects.filter(esta_activo=True)
-    return render(request, 'tienda_home.html', {'productos': productos})
-
-
-# ==========================================
-# 2. INICIO DE SESIÓN (LOGIN)
+# 1. INICIO DE SESIÓN (LOGIN)
 # ==========================================
 def login_view(request):
     if request.method == 'POST':
@@ -39,69 +30,67 @@ def login_view(request):
 
 
 # ==========================================
-# 3. REDIRECCIÓN DINÁMICA POR ROL
+# 2. REDIRECCIÓN DINÁMICA POR ROL
 # ==========================================
 def redirect_por_rol(user):
     rol = user.perfil.rol
 
     if rol == 'PROVEEDOR':
-        # 🌟 CORREGIDO: Apunta a la función 'dashboard' de esta app con su namespace
         return redirect('usuarios:dashboard')
     elif rol == 'ADMIN':
-        # 🌟 CORREGIDO: Redirige al namespace de la app independiente 'administracion'
         return redirect('administracion:dashboard')
     else:  # CLIENTE
         return redirect('usuarios:tienda_home')
 
 
 # ==========================================
-# 4. REGISTRO DE USUARIOS NUEVOS
+# 3. REGISTRO DE USUARIOS NUEVOS
 # ==========================================
 def registro(request):
     if request.method == 'POST':
         usuario = request.POST.get('username')
         correo = request.POST.get('email')
         clave = request.POST.get('password')
-        
+
         if User.objects.filter(username=usuario).exists() or User.objects.filter(email=correo).exists():
             return render(request, 'registro.html', {'error': 'El usuario o correo ya existen.'})
-            
+
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
-        
+
         auth_login(request, nuevo_usuario)
         return redirect('usuarios:tienda_home')
-        
+
     return render(request, 'registro.html')
 
 
 # ==========================================
-# 5. PERFIL DE USUARIO
+# 4. PERFIL DE USUARIO
 # ==========================================
-@login_required(login_url='usuarios:login')  # 🌟 CORREGIDO: Namespace del login
+@login_required(login_url='usuarios:login')
 def perfil(request):
     return render(request, 'perfil.html')
 
 
 # ==========================================
-# 6. DASHBOARD / PANEL DEL PROVEEDOR
+# 5. DASHBOARD / PANEL DEL PROVEEDOR
 # ==========================================
 @login_required(login_url='usuarios:login')
 def dashboard(request):
     if request.user.perfil.rol != 'PROVEEDOR':
         return redirect('usuarios:tienda_home')
-        
-    return render(request, 'dashboard_proveedor.html')
+
+    return redirect('dashboard')  # redirige a inventario:dashboard, la vista completa con productos
+
 
 # ==========================================
-# 7. PÁGINA PRINCIPAL DE LA TIENDA
+# 6. PÁGINA PRINCIPAL DE LA TIENDA (VISTA PÚBLICA)
 # ==========================================
 def tienda_home(request):
-    productos = Producto.objects.all()
- 
+    Producto = apps.get_model('inventario', 'Producto')
+    productos = Producto.objects.filter(esta_activo=True)
     diseno = DisenoSitio.cargar()
- 
-    return render(request, 'usuarios/pagina_principal.html', {
+
+    return render(request, 'tienda_home.html', {
         'productos': productos,
-        'diseno': diseno,  
+        'diseno': diseno,
     })
- 

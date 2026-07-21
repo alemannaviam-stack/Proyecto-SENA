@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -174,7 +175,7 @@
         <h2 class="product-title">{{ producto.nombre }}</h2>
         <span class="product-ref">{{ producto.marca|default:"" }}</span>
         <div class="product-footer">
-          <span class="product-price">$ {{ producto.precio }} COP</span>
+          <span class="product-price">$ {{ producto.precio|floatformat:0|intcomma }} COP</span>
           <button class="btn-add btn-add-real" data-url="{% url 'carrito:agregar_al_carrito' producto_id=producto.id %}">Agregar</button>
         </div>
       </div>

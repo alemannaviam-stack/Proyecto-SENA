@@ -27,13 +27,3 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
-
-
-class Stock(models.Model):
-    producto = models.OneToOneField(Producto, on_delete=models.CASCADE, related_name='stock')
-    cantidad = models.PositiveIntegerField(default=0)
-    proveedor = models.ForeignKey('usuarios.Perfil', on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'rol': 'proveedor'})
-
-    def __str__(self):
-        return f"{self.producto.nombre} - {self.cantidad} unidades"
-    

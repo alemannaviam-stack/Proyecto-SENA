@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from inventario.models import Producto  # ajusta el nombre real de tu modelo
+from inventario.models import Producto
 
 
 class Envio(models.Model):
@@ -26,6 +26,10 @@ class Envio(models.Model):
     estado_actual = models.CharField(max_length=20, choices=ESTADOS, default='preparando')
     numero_guia = models.CharField(max_length=20, unique=True)
 
+    # Datos de la venta (nuevos)
+    cantidad = models.PositiveIntegerField(default=1)
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
     # Datos de envío (capturados en el checkout)
     nombre_destinatario = models.CharField(max_length=150, blank=True)
     telefono = models.CharField(max_length=20, blank=True)
@@ -34,6 +38,9 @@ class Envio(models.Model):
     departamento = models.CharField(max_length=100, blank=True)
     ciudad = models.CharField(max_length=100, blank=True)
     metodo_pago = models.CharField(max_length=20, choices=METODOS_PAGO, blank=True)
+
+    def subtotal(self):
+        return self.cantidad * self.precio_unitario
 
     def __str__(self):
         return f"Envío #{self.numero_guia} - {self.cliente}"
