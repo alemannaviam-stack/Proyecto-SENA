@@ -272,79 +272,77 @@ h2 {
    7. ESTILOS ADICIONALES PARA EL FORMULARIO DE REGISTRO
    ========================================================================== */
 
-   /* Contenedor principal */
 .input-box.tipo-cuenta {
   display: flex;
-  gap: 12px;
-  margin: 20px 0;
-  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 6px 0 14px;
 }
-
-/* Estilo de las opciones (Tarjetas) */
+ 
 .input-box.tipo-cuenta label {
-  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 12px 16px;
-  background-color: var(--purple-50);
-  border: 2px solid var(--purple-200);
-  border-radius: var(--radius);
-  color: var(--purple-900);
-  font-weight: 600;
-  font-size: 0.95rem;
+  gap: 10px;
+  padding: 13px 14px;
+  border: 2px solid var(--purple-800);
+  border-radius: calc(var(--radius) - 4px);
   cursor: pointer;
-  transition: all 0.3s ease;
-  user-select: none;
-  text-align: center;
+  font-size: 0.92rem;
+  color: var(--purple-200);
+  background: var(--purple-900);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
-
-/* Ocultamos el radio button por defecto */
-.input-box.tipo-cuenta label input[type="radio"] {
+ 
+.input-box.tipo-cuenta label:hover {
+  border-color: var(--purple-500);
+  background: var(--purple-800);
+  color: var(--purple-50);
+}
+ 
+/* Radio button custom, en vez del nativo del navegador */
+.input-box.tipo-cuenta input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border: 2px solid var(--purple-400);
   border-radius: 50%;
-  margin-right: 8px;
-  outline: none;
-  display: grid;
-  place-content: center;
-  transition: all 0.2s ease;
+  margin: 0;
+  flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
 }
-
-/* Punto interno del radio personalizado */
-.input-box.tipo-cuenta label input[type="radio"]::before {
+ 
+.input-box.tipo-cuenta input[type="radio"]::after {
   content: "";
-  width: 8px;
-  height: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background-color: white;
-  transform: scale(0);
-  transition: transform 0.2s ease;
+  background: var(--purple-300);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.15s ease;
 }
-
-/* Efecto al pasar el cursor (Hover) */
-.input-box.tipo-cuenta label:hover {
-  background-color: var(--purple-100);
-  border-color: var(--purple-400);
-  transform: translateY(-2px);
+ 
+.input-box.tipo-cuenta input[type="radio"]:checked::after {
+  transform: translate(-50%, -50%) scale(1);
 }
-
-/* Estado SELECCIONADO (Checked) */
-.input-box.tipo-cuenta label:has(input:checked) {
+ 
+/* Resalta la opción seleccionada */
+.input-box.tipo-cuenta label:has(input[type="radio"]:checked) {
+  border-color: var(--purple-500);
   background: var(--gradient-hero);
-  color: #ffffff;
-  border-color: transparent;
-  box-shadow: var(--shadow);
+  color: var(--purple-50);
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(155, 89, 182, 0.25);
 }
-
-.input-box.tipo-cuenta label input:checked {
-  border-color: #ffffff;
-  background-color: transparent;
-}
-
-.input-box.tipo-cuenta label input:checked::before {
-  transform: scale(1);
+ 
+/* Fallback para navegadores sin soporte de :has() */
+.input-box.tipo-cuenta input[type="radio"]:checked {
+  border-color: var(--purple-500);
 }
