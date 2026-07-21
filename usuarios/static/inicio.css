@@ -267,3 +267,84 @@ h2 {
         padding: 30px 20px;
     }
 }
+
+/* ==========================================================================
+   7. ESTILOS ADICIONALES PARA EL FORMULARIO DE REGISTRO
+   ========================================================================== */
+
+   /* Contenedor principal */
+.input-box.tipo-cuenta {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+/* Estilo de las opciones (Tarjetas) */
+.input-box.tipo-cuenta label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  background-color: var(--purple-50);
+  border: 2px solid var(--purple-200);
+  border-radius: var(--radius);
+  color: var(--purple-900);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  text-align: center;
+}
+
+/* Ocultamos el radio button por defecto */
+.input-box.tipo-cuenta label input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--purple-400);
+  border-radius: 50%;
+  margin-right: 8px;
+  outline: none;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Punto interno del radio personalizado */
+.input-box.tipo-cuenta label input[type="radio"]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: white;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
+/* Efecto al pasar el cursor (Hover) */
+.input-box.tipo-cuenta label:hover {
+  background-color: var(--purple-100);
+  border-color: var(--purple-400);
+  transform: translateY(-2px);
+}
+
+/* Estado SELECCIONADO (Checked) */
+.input-box.tipo-cuenta label:has(input:checked) {
+  background: var(--gradient-hero);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: var(--shadow);
+}
+
+.input-box.tipo-cuenta label input:checked {
+  border-color: #ffffff;
+  background-color: transparent;
+}
+
+.input-box.tipo-cuenta label input:checked::before {
+  transform: scale(1);
+}
