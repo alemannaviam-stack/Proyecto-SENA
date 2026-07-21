@@ -3,17 +3,23 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from administracion.models import DisenoSitio
+from .models import Perfil 
 from django.apps import apps
 
 # ==========================================
 # 1. TIENDA HOME (VISTA PÚBLICA)
 # ==========================================
 def tienda_home(request):
-    Producto = apps.get_model('inventario', 'Producto') 
-    productos = Producto.objects.filter(esta_activo=True)
-    return render(request, 'tienda_home.html', {'productos': productos})
-
+  
+    Producto = apps.get_model('inventario', 'Producto')
+    DisenoSitio = apps.get_model('administracion', 'DisenoSitio')
+    productos = Producto.objects.all()
+    diseno = DisenoSitio.cargar()
+    
+    return render(request, 'tienda_home.html', {
+        'productos': productos,
+        'diseno': diseno,  
+    })
 
 # ==========================================
 # 2. INICIO DE SESIÓN (LOGIN)
@@ -62,15 +68,21 @@ def registro(request):
         usuario = request.POST.get('username')
         correo = request.POST.get('email')
         clave = request.POST.get('password')
-        
+        tipo_cuenta = request.POST.get('tipo_cuenta', 'CLIENTE')  # 'CLIENTE' o 'PROVEEDOR'
+
         if User.objects.filter(username=usuario).exists() or User.objects.filter(email=correo).exists():
             return render(request, 'registro.html', {'error': 'El usuario o correo ya existen.'})
-            
+
         nuevo_usuario = User.objects.create_user(username=usuario, email=correo, password=clave)
-        
+        Perfil.objects.create(usuario=nuevo_usuario, rol=tipo_cuenta)
+
         auth_login(request, nuevo_usuario)
+
+        if tipo_cuenta == 'PROVEEDOR':
+            messages.info(request, "Tu cuenta de proveedor fue creada y está pendiente de aprobación por un administrador.")
+
         return redirect('usuarios:tienda_home')
-        
+
     return render(request, 'registro.html')
 
 
@@ -91,17 +103,3 @@ def dashboard(request):
         return redirect('usuarios:tienda_home')
         
     return render(request, 'dashboard_proveedor.html')
-
-# ==========================================
-# 7. PÁGINA PRINCIPAL DE LA TIENDA
-# ==========================================
-def tienda_home(request):
-    productos = Producto.objects.all()
- 
-    diseno = DisenoSitio.cargar()
- 
-    return render(request, 'usuarios/pagina_principal.html', {
-        'productos': productos,
-        'diseno': diseno,  
-    })
- 
