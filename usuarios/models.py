@@ -14,10 +14,6 @@ class Perfil(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     ciudad = models.CharField(max_length=100, blank=True, null=True)
- 
-    # --- CAMPO NUEVO ---
-    # Los CLIENTE y ADMIN quedan aprobados automáticamente.
-    # Los PROVEEDOR nacen sin aprobar y deben esperar al administrador.
     aprobado = models.BooleanField(default=True)
  
     def save(self, *args, **kwargs):

@@ -1,63 +1,54 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.apps import apps  
-
-def es_administrador(user):
-    return user.is_authenticated and hasattr(user, 'perfil') and user.perfil.rol == 'ADMIN'
-
-
-# ==========================================
-# dashboard
-
-@login_required(login_url='usuarios:login')
-def admin_dashboard(request):
-    if not es_administrador(request.user):
-        return redirect('usuarios:tienda_home')
-        
-    # 🌟 Traemos el modelo Perfil dinámicamente de la app 'usuarios' sin usar import
-    Perfil = apps.get_model('usuarios', 'Perfil')
-    
-    # Conseguir los proveedores que están esperando aprobación
-    proveedores_pendientes = Perfil.objects.filter(rol='PROVEEDOR', usuario__is_active=False) 
-    
-    context = {
-        'proveedores_pendientes': proveedores_pendientes
-    }
-    return render(request, 'administracion/dashboard.html', context)
+from django.contrib import messages
+from django.apps import apps
+from .decorators import admin_required
+from .models import DisenoSitio
+from .forms import DisenoSitioForm
 
 
-# ==========================================
-# aprovar proveedores
+@admin_required
+def dashboard(request):
+    proveedores_pendientes = (
+        apps.get_model('usuarios', 'Perfil').objects
+        .filter(rol='PROVEEDOR', aprobado=False)
+        .select_related('usuario')
+        .order_by('-id')
+    )
+    return render(request, 'administracion/dashboard.html', {
+        'proveedores_pendientes': proveedores_pendientes,
+    })
 
-@login_required(login_url='usuarios:login')
+
+@admin_required
 def aprobar_proveedor(request, perfil_id):
-    if not es_administrador(request.user):
-        return redirect('usuarios:tienda_home')
-        
-    # 🌟 Traemos el modelo Perfil dinámicamente sin usar import
-    Perfil = apps.get_model('usuarios', 'Perfil')
-        
-    perfil = get_object_or_404(Perfil, id=perfil_id)
-    
-    # Activar el usuario proveedor en el sistema
-    user_proveedor = perfil.usuario
-    user_proveedor.is_active = True
-    user_proveedor.save()
-    
+    perfil = get_object_or_404(apps.get_model('usuarios', 'Perfil'), id=perfil_id, rol='PROVEEDOR')
+    perfil.aprobado = True
+    perfil.save()
+    messages.success(request, f"El proveedor {perfil.usuario.username} fue aprobado correctamente.")
     return redirect('administracion:dashboard')
 
 
-# ==========================================
-# gestion/ productos
+@admin_required
+def rechazar_proveedor(request, perfil_id):
+    perfil = get_object_or_404(apps.get_model('usuarios', 'Perfil'), id=perfil_id, rol='PROVEEDOR')
+    usuario = perfil.usuario
+    nombre = usuario.username
+    usuario.delete()  # borra el User y, en cascada, su Perfil
+    messages.warning(request, f"La solicitud de {nombre} fue rechazada y eliminada.")
+    return redirect('administracion:dashboard')
 
-@login_required(login_url='usuarios:login')
-def gestion_diseno_productos(request):
-    if not es_administrador(request.user):
-        return redirect('usuarios:tienda_home')
-        
-    # 🌟 Traemos el modelo Producto dinámicamente de tu app de 'carrito' (o 'inventario')
-    Producto = apps.get_model('carrito', 'Producto') 
-    
-    productos = Producto.objects.all()
-    
-    return render(request, 'administracion/gestion_diseno.html', {'productos': productos})
+
+@admin_required
+def gestion_diseno(request):
+    diseno = DisenoSitio.cargar()
+
+    if request.method == 'POST':
+        form = DisenoSitioForm(request.POST, instance=diseno)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "El diseño de la página se actualizó correctamente.")
+            return redirect('administracion:gestion_diseno')
+    else:
+        form = DisenoSitioForm(instance=diseno)
+
+    return render(request, 'administracion/gestion_diseno.html', {'form': form})
